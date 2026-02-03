@@ -1,0 +1,242 @@
+---
+// Neural Network Background Component
+// Uses canvas for performant particle animation with requestAnimationFrame
+---
+
+<div class="neural-background" aria-hidden="true">
+  <!-- Static star field (CSS-only, always visible) -->
+  <div class="star-field"></div>
+
+  <!-- Nebula glow effects -->
+  <div class="nebula-glow nebula-glow-1"></div>
+  <div class="nebula-glow nebula-glow-2"></div>
+  <div class="nebula-glow nebula-glow-3"></div>
+
+  <!-- Canvas for animated particles (JS-enhanced) -->
+  <canvas id="neural-canvas" class="neural-canvas"></canvas>
+</div>
+
+<script>
+  class NeuralNetwork {
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
+    private particles: Particle[] = [];
+    private animationId: number = 0;
+    private mouseX: number = 0;
+    private mouseY: number = 0;
+    private isReducedMotion: boolean = false;
+
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d')!;
+      this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      this.resize();
+      this.init();
+      this.addEventListeners();
+
+      if (!this.isReducedMotion) {
+        this.animate();
+      } else {
+        this.drawStatic();
+      }
+    }
+
+    private resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+
+    private init() {
+      this.particles = [];
+      const particleCount = Math.min(50, Math.floor((this.canvas.width * this.canvas.height) / 25000));
+
+      for (let i = 0; i < particleCount; i++) {
+        this.particles.push(new Particle(this.canvas.width, this.canvas.height));
+      }
+    }
+
+    private addEventListeners() {
+      window.addEventListener('resize', () => {
+        this.resize();
+        this.init();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+      });
+    }
+
+    private drawStatic() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // Draw particles
+      this.particles.forEach(particle => {
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = particle.color;
+        this.ctx.fill();
+      });
+
+      // Draw connections
+      this.drawConnections();
+    }
+
+    private animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // Update and draw particles
+      this.particles.forEach(particle => {
+        particle.update(this.canvas.width, this.canvas.height, this.mouseX, this.mouseY);
+
+        // Draw glow
+        const gradient = this.ctx.createRadialGradient(
+          particle.x, particle.y, 0,
+          particle.x, particle.y, particle.radius * 3
+        );
+        gradient.addColorStop(0, particle.color);
+        gradient.addColorStop(1, 'transparent');
+
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, particle.radius * 3, 0, Math.PI * 2);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+
+        // Draw core
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = particle.color;
+        this.ctx.fill();
+      });
+
+      // Draw connections
+      this.drawConnections();
+
+      this.animationId = requestAnimationFrame(() => this.animate());
+    }
+
+    private drawConnections() {
+      const connectionDistance = 150;
+
+      for (let i = 0; i < this.particles.length; i++) {
+        for (let j = i + 1; j < this.particles.length; j++) {
+          const dx = this.particles[i].x - this.particles[j].x;
+          const dy = this.particles[i].y - this.particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < connectionDistance) {
+            const opacity = (1 - distance / connectionDistance) * 0.3;
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+            this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+            this.ctx.lineWidth = 1;
+            this.ctx.stroke();
+          }
+        }
+      }
+    }
+
+    public destroy() {
+      cancelAnimationFrame(this.animationId);
+    }
+  }
+
+  class Particle {
+    public x: number;
+    public y: number;
+    public radius: number;
+    public color: string;
+    private vx: number;
+    private vy: number;
+    private baseRadius: number;
+
+    private static colors = [
+      'rgba(0, 212, 255, 0.8)',   // Cyan
+      'rgba(167, 139, 250, 0.8)', // Violet
+      'rgba(255, 176, 32, 0.6)',  // Amber
+    ];
+
+    constructor(canvasWidth: number, canvasHeight: number) {
+      this.x = Math.random() * canvasWidth;
+      this.y = Math.random() * canvasHeight;
+      this.baseRadius = Math.random() * 2 + 1;
+      this.radius = this.baseRadius;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.color = Particle.colors[Math.floor(Math.random() * Particle.colors.length)];
+    }
+
+    public update(canvasWidth: number, canvasHeight: number, mouseX: number, mouseY: number) {
+      // Basic movement
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Bounce off edges
+      if (this.x < 0 || this.x > canvasWidth) this.vx *= -1;
+      if (this.y < 0 || this.y > canvasHeight) this.vy *= -1;
+
+      // Mouse interaction - particles grow slightly when near mouse
+      const dx = mouseX - this.x;
+      const dy = mouseY - this.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = 150;
+
+      if (distance < maxDistance) {
+        const scale = 1 + (1 - distance / maxDistance) * 0.5;
+        this.radius = this.baseRadius * scale;
+      } else {
+        this.radius = this.baseRadius;
+      }
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('neural-canvas') as HTMLCanvasElement;
+    if (canvas) {
+      new NeuralNetwork(canvas);
+    }
+  });
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', () => {
+    const canvas = document.getElementById('neural-canvas') as HTMLCanvasElement;
+    if (canvas) {
+      new NeuralNetwork(canvas);
+    }
+  });
+</script>
+
+<style>
+  .neural-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--bg-void);
+  }
+
+  .neural-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Gradient overlay for depth */
+  .neural-background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      rgba(8, 12, 20, 0.4) 60%,
+      rgba(8, 12, 20, 0.9) 100%
+    );
+    pointer-events: none;
+  }
+</style>

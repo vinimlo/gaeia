@@ -1,0 +1,72 @@
+{
+  "id": "llm-do-zero",
+  "nome": "LLM do Zero",
+  "descricao": "Entenda como LLMs funcionam por dentro, construindo um do zero",
+  "icone": "brain",
+  "nivel": "iniciante",
+  "horasEstimadas": 80,
+
+  "modulos": [
+    {
+      "id": "fundamentos-matematicos",
+      "nome": "Fundamentos Matematicos",
+      "descricao": "A base necessaria para entender redes neurais",
+      "topicos": [
+        "neuronio-e-vetores",
+        "mlp-e-matrizes",
+        "loss-e-derivadas",
+        "backpropagation"
+      ]
+    },
+    {
+      "id": "arquitetura-transformer",
+      "nome": "Arquitetura Transformer",
+      "descricao": "Como a atencao revolucionou NLP",
+      "topicos": [
+        "embeddings-texto",
+        "self-attention",
+        "transformer",
+        "tokenizacao"
+      ]
+    },
+    {
+      "id": "construindo-gpt",
+      "nome": "Construindo seu GPT",
+      "descricao": "Colocando tudo junto",
+      "topicos": [
+        "seu-gpt"
+      ]
+    }
+  ],
+
+  "badges": [
+    {
+      "id": "primeiro-neuronio",
+      "nome": "Primeiro Neuronio",
+      "descricao": "Completou o primeiro topico",
+      "icone": "microscope",
+      "condicao": { "topicosCompletos": 1 }
+    },
+    {
+      "id": "matematica-dominada",
+      "nome": "Matematica Dominada",
+      "descricao": "Completou os fundamentos matematicos",
+      "icone": "calculator",
+      "condicao": { "moduloCompleto": "fundamentos-matematicos" }
+    },
+    {
+      "id": "arquiteto-transformer",
+      "nome": "Arquiteto Transformer",
+      "descricao": "Dominou a arquitetura transformer",
+      "icone": "building",
+      "condicao": { "moduloCompleto": "arquitetura-transformer" }
+    },
+    {
+      "id": "mestre-llm",
+      "nome": "Mestre LLM",
+      "descricao": "Completou toda a trilha",
+      "icone": "graduation-cap",
+      "condicao": { "trilhaCompleta": true }
+    }
+  ]
+}

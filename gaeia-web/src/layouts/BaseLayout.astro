@@ -1,0 +1,142 @@
+---
+import '../styles/global.css';
+import '../styles/particles.css';
+import '../styles/markdown.css';
+import Sidebar from '../components/Sidebar.astro';
+import NeuralBackground from '../components/NeuralBackground.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'GAEIA - Guia de Aprendizado em Engenharia de IA' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | GAEIA</title>
+  </head>
+  <body class="min-h-screen">
+    <NeuralBackground />
+
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <Sidebar />
+
+      <!-- Main Content -->
+      <main class="flex-1 ml-0 md:ml-[280px] p-6 md:p-8 lg:p-12">
+        <div class="max-w-4xl mx-auto">
+          <slot />
+        </div>
+      </main>
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <button
+      id="mobile-menu-toggle"
+      class="fixed bottom-6 right-6 z-50 md:hidden w-14 h-14 rounded-full bg-nebula border border-star-dust flex items-center justify-center glow-cyan"
+      aria-label="Toggle navigation menu"
+    >
+      <svg class="w-6 h-6 text-synapse-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+
+    <script>
+      // Mobile menu toggle
+      const toggle = document.getElementById('mobile-menu-toggle');
+      const sidebar = document.querySelector('aside');
+
+      toggle?.addEventListener('click', () => {
+        sidebar?.classList.toggle('-translate-x-full');
+        sidebar?.classList.toggle('translate-x-0');
+      });
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth < 768) {
+          const target = e.target as Element;
+          if (!sidebar?.contains(target) && !toggle?.contains(target)) {
+            sidebar?.classList.add('-translate-x-full');
+            sidebar?.classList.remove('translate-x-0');
+          }
+        }
+      });
+
+      // Code copy functionality
+      document.querySelectorAll('.code-copy-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const wrapper = btn.closest('.code-block-wrapper');
+          if (!wrapper) return;
+
+          const codeEl = wrapper.querySelector('pre code');
+          if (!codeEl) return;
+
+          const code = codeEl.textContent || '';
+
+          try {
+            await navigator.clipboard.writeText(code);
+
+            // Visual feedback
+            const copyIcon = btn.querySelector('.copy-icon') as HTMLElement;
+            const checkIcon = btn.querySelector('.check-icon') as HTMLElement;
+            const copyText = btn.querySelector('.copy-text') as HTMLElement;
+
+            if (copyIcon && checkIcon && copyText) {
+              copyIcon.style.display = 'none';
+              checkIcon.style.display = 'block';
+              copyText.textContent = 'Copied!';
+              btn.classList.add('copied');
+
+              setTimeout(() => {
+                copyIcon.style.display = 'block';
+                checkIcon.style.display = 'none';
+                copyText.textContent = 'Copy';
+                btn.classList.remove('copied');
+              }, 2000);
+            }
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('.heading-anchor').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const href = anchor.getAttribute('href');
+          if (!href) return;
+
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Update URL without jumping
+            history.pushState(null, '', href);
+          }
+        });
+      });
+
+      // Handle external links - ensure they open in new tab consistently
+      document.addEventListener('click', (e) => {
+        const link = (e.target as Element).closest('a[target="_blank"]');
+        if (link && link instanceof HTMLAnchorElement) {
+          e.preventDefault();
+          const newWindow = window.open(link.href, '_blank');
+          if (newWindow) {
+            newWindow.opener = null;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

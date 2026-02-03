@@ -1,0 +1,224 @@
+{
+  "topicos": [
+    {
+      "id": "neuronio-e-vetores",
+      "arquivo": "neuronio-e-vetores.md",
+      "tags": ["fundamentos", "matematica", "neural", "algebra-linear", "dot-product"]
+    },
+    {
+      "id": "mlp-e-matrizes",
+      "arquivo": "mlp-e-matrizes.md",
+      "tags": ["fundamentos", "matematica", "neural", "matrizes", "forward-pass", "broadcasting"]
+    },
+    {
+      "id": "loss-e-derivadas",
+      "arquivo": "loss-e-derivadas.md",
+      "tags": ["fundamentos", "matematica", "calculo", "otimizacao", "loss", "gradiente"]
+    },
+    {
+      "id": "backpropagation",
+      "arquivo": "backpropagation.md",
+      "tags": ["fundamentos", "neural", "gradientes", "otimizacao", "regra-da-cadeia", "computational-graph"]
+    },
+    {
+      "id": "embeddings-texto",
+      "arquivo": "embeddings-texto.md",
+      "tags": ["nlp", "vetores", "representacao", "word2vec", "embeddings"]
+    },
+    {
+      "id": "self-attention",
+      "arquivo": "self-attention.md",
+      "tags": ["transformer", "atencao", "nlp", "arquitetura", "softmax"]
+    },
+    {
+      "id": "transformer",
+      "arquivo": "transformer.md",
+      "tags": ["transformer", "arquitetura", "nlp", "encoder-decoder", "multi-head-attention", "layer-norm"]
+    },
+    {
+      "id": "tokenizacao",
+      "arquivo": "tokenizacao.md",
+      "tags": ["nlp", "preprocessamento", "bpe", "texto", "vocabulario"]
+    },
+    {
+      "id": "seu-gpt",
+      "arquivo": "seu-gpt.md",
+      "tags": ["projeto", "gpt", "transformer", "implementacao", "decoder-only", "autoregressive"]
+    },
+    {
+      "id": "what-is-ai-engineer",
+      "arquivo": "what-is-ai-engineer.md",
+      "tags": ["ai-engineer", "carreira", "introducao"]
+    },
+    {
+      "id": "ai-vs-agi",
+      "arquivo": "ai-vs-agi.md",
+      "tags": ["ai", "agi", "conceitos", "introducao"]
+    },
+    {
+      "id": "llms-intro",
+      "arquivo": "llms-intro.md",
+      "tags": ["llms", "modelos", "introducao"]
+    },
+    {
+      "id": "embeddings-intro",
+      "arquivo": "embeddings-intro.md",
+      "tags": ["embeddings", "vetores", "terminologia"]
+    },
+    {
+      "id": "vector-databases-intro",
+      "arquivo": "vector-databases-intro.md",
+      "tags": ["vector-databases", "terminologia"]
+    },
+    {
+      "id": "rag-intro",
+      "arquivo": "rag-intro.md",
+      "tags": ["rag", "terminologia"]
+    },
+    {
+      "id": "ai-agents-intro",
+      "arquivo": "ai-agents-intro.md",
+      "tags": ["ai-agents", "terminologia"]
+    },
+    {
+      "id": "prompt-engineering-intro",
+      "arquivo": "prompt-engineering-intro.md",
+      "tags": ["prompt-engineering", "terminologia"]
+    },
+    {
+      "id": "writing-prompts",
+      "arquivo": "writing-prompts.md",
+      "tags": ["prompt-engineering", "prompts", "pratica"]
+    },
+    {
+      "id": "openai-api",
+      "arquivo": "openai-api.md",
+      "tags": ["openai", "api", "llms"]
+    },
+    {
+      "id": "anthropic-claude",
+      "arquivo": "anthropic-claude.md",
+      "tags": ["anthropic", "claude", "api", "llms"]
+    },
+    {
+      "id": "token-counting",
+      "arquivo": "token-counting.md",
+      "tags": ["tokens", "prompt-engineering", "otimizacao"]
+    },
+    {
+      "id": "fine-tuning",
+      "arquivo": "fine-tuning.md",
+      "tags": ["fine-tuning", "modelos", "treinamento"]
+    },
+    {
+      "id": "open-vs-closed-models",
+      "arquivo": "open-vs-closed-models.md",
+      "tags": ["modelos", "open-source", "closed-source"]
+    },
+    {
+      "id": "hugging-face",
+      "arquivo": "hugging-face.md",
+      "tags": ["hugging-face", "modelos", "open-source"]
+    },
+    {
+      "id": "ai-safety-ethics",
+      "arquivo": "ai-safety-ethics.md",
+      "tags": ["ai-safety", "etica", "responsabilidade"]
+    },
+    {
+      "id": "prompt-injection",
+      "arquivo": "prompt-injection.md",
+      "tags": ["seguranca", "prompt-injection", "vulnerabilidades"]
+    },
+    {
+      "id": "bias-fairness",
+      "arquivo": "bias-fairness.md",
+      "tags": ["bias", "fairness", "etica"]
+    },
+    {
+      "id": "what-are-embeddings",
+      "arquivo": "what-are-embeddings.md",
+      "tags": ["embeddings", "vetores", "representacao"]
+    },
+    {
+      "id": "openai-embeddings-api",
+      "arquivo": "openai-embeddings-api.md",
+      "tags": ["openai", "embeddings", "api"]
+    },
+    {
+      "id": "semantic-search",
+      "arquivo": "semantic-search.md",
+      "tags": ["semantic-search", "embeddings", "busca"]
+    },
+    {
+      "id": "vector-databases",
+      "arquivo": "vector-databases.md",
+      "tags": ["vector-databases", "armazenamento", "embeddings"]
+    },
+    {
+      "id": "chroma",
+      "arquivo": "chroma.md",
+      "tags": ["chroma", "vector-databases", "open-source"]
+    },
+    {
+      "id": "pinecone",
+      "arquivo": "pinecone.md",
+      "tags": ["pinecone", "vector-databases", "cloud"]
+    },
+    {
+      "id": "faiss",
+      "arquivo": "faiss.md",
+      "tags": ["faiss", "vector-databases", "facebook"]
+    },
+    {
+      "id": "what-is-rag",
+      "arquivo": "what-is-rag.md",
+      "tags": ["rag", "retrieval", "llms"]
+    },
+    {
+      "id": "chunking",
+      "arquivo": "chunking.md",
+      "tags": ["chunking", "rag", "preprocessamento"]
+    },
+    {
+      "id": "retrieval-process",
+      "arquivo": "retrieval-process.md",
+      "tags": ["retrieval", "rag", "busca"]
+    },
+    {
+      "id": "langchain",
+      "arquivo": "langchain.md",
+      "tags": ["langchain", "framework", "rag"]
+    },
+    {
+      "id": "ai-agents",
+      "arquivo": "ai-agents.md",
+      "tags": ["ai-agents", "autonomia", "llms"]
+    },
+    {
+      "id": "react-prompting",
+      "arquivo": "react-prompting.md",
+      "tags": ["react", "prompting", "agentes"]
+    },
+    {
+      "id": "mcp-protocol",
+      "arquivo": "mcp-protocol.md",
+      "tags": ["mcp", "protocolo", "agentes"]
+    },
+    {
+      "id": "multimodal-ai",
+      "arquivo": "multimodal-ai.md",
+      "tags": ["multimodal", "imagem", "audio", "video"]
+    },
+    {
+      "id": "image-understanding",
+      "arquivo": "image-understanding.md",
+      "tags": ["visao", "imagem", "multimodal"]
+    },
+    {
+      "id": "speech-to-text",
+      "arquivo": "speech-to-text.md",
+      "tags": ["stt", "audio", "transcricao"]
+    }
+  ]
+}

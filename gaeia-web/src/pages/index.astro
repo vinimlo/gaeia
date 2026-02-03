@@ -1,0 +1,227 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProgressBar from '../components/ProgressBar.astro';
+import StreakCounter from '../components/StreakCounter.astro';
+import BadgeShelf from '../components/BadgeShelf.astro';
+import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos, getAllTags } from '../utils/trilhas';
+import { BADGE_DEFINITIONS, calculateEarnedBadges } from '../utils/badges';
+import type { StreakInfo } from '../utils/progress';
+import type { Trilha } from '../types/trilhas';
+
+// Disable prerendering for dynamic data
+export const prerender = false;
+
+// Load trilhas and topics
+const trilhas = await getAllTrilhas();
+const topicos = await getAllTopicos();
+const topicosCount = topicos.length;
+const allTags = await getAllTags();
+
+// Default streak data (will be hydrated client-side from localStorage)
+const defaultStreakData: StreakInfo = {
+  currentStreak: 0,
+  longestStreak: 0,
+  lastActiveDate: undefined,
+  weekActivity: [false, false, false, false, false, false, false]
+};
+
+// Calculate badges with empty progress (will be hydrated client-side)
+const badges = calculateEarnedBadges([], {
+  totalBlocks: 0,
+  completedBlocks: 0,
+  inProgressBlocks: 0,
+  overallPercentage: 0,
+  blocks: []
+}, defaultStreakData, {});
+
+// Icon mapping
+const iconMap: Record<string, string> = {
+  brain: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+  rocket: 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+  cpu: 'M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M13 13a2 2 0 11-4 0 2 2 0 014 0zm-2-6V5m0 14v-2m-6-6h2m14 0h-2',
+};
+---
+
+<BaseLayout title="GAEIA - Sua Jornada em IA">
+  <div class="space-y-8 animate-fade-in">
+    <!-- Hero Section -->
+    <header class="text-center py-6">
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-bright mb-4">
+        <span class="text-synapse-cyan text-glow-cyan">GAEIA</span>
+      </h1>
+      <p class="text-dim text-lg max-w-2xl mx-auto">
+        Guia de Aprendizado em Engenharia de IA.
+        Sua jornada em IA comeca aqui.
+      </p>
+    </header>
+
+    <!-- Trilhas Section -->
+    <section>
+      <h2 class="text-2xl font-display font-semibold text-bright mb-6 flex items-center gap-2">
+        <svg class="w-6 h-6 text-synapse-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        Trilhas de Aprendizado
+      </h2>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {trilhas.map((trilha) => {
+          const totalTopicos = getTrilhaTopicoIds(trilha).length;
+          const icon = iconMap[trilha.icone] || iconMap.brain;
+
+          return (
+            <a
+              href={`/trilhas/${trilha.id}`}
+              class="glass-card p-6 rounded-xl hover:border-synapse-cyan/50 transition-all group"
+            >
+              <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-xl bg-synapse-cyan/20 flex items-center justify-center group-hover:glow-cyan transition-shadow flex-shrink-0">
+                  <svg class="w-7 h-7 text-synapse-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={icon} />
+                  </svg>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-xl font-display font-semibold text-bright group-hover:text-synapse-cyan transition-colors mb-1">
+                    {trilha.nome}
+                  </h3>
+                  <p class="text-dim text-sm mb-3 line-clamp-2">
+                    {trilha.descricao}
+                  </p>
+                  <div class="flex items-center gap-4 text-sm text-dim">
+                    <span>{totalTopicos} topicos</span>
+                    <span>~{trilha.horasEstimadas}h</span>
+                  </div>
+
+                  <!-- Progress placeholder -->
+                  <div class="mt-3" data-trilha-progress={trilha.id}>
+                    <ProgressBar value={0} height={4} />
+                  </div>
+                </div>
+
+                <svg class="w-5 h-5 text-dim group-hover:text-synapse-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- Explore Topics Section -->
+    <section class="glass-card p-6 rounded-xl">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-display font-semibold text-bright flex items-center gap-2">
+          <svg class="w-5 h-5 text-dendrite-violet" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+          Explorar Topicos
+        </h2>
+        <a href="/topicos" class="text-sm text-synapse-cyan hover:underline">
+          Ver todos ({topicosCount}) &rarr;
+        </a>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        {allTags.slice(0, 12).map(tag => (
+          <a
+            href={`/topicos?tag=${tag}`}
+            class="px-3 py-1.5 rounded-full bg-star-dust/20 text-sm text-dim hover:bg-synapse-cyan/20 hover:text-synapse-cyan transition-colors"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Streak Counter (mobile) -->
+    <div class="lg:hidden" id="streak-counter-mobile">
+      <StreakCounter {...defaultStreakData} />
+    </div>
+
+    <!-- Badges Section -->
+    <section>
+      <BadgeShelf badges={badges} title="Conquistas Recentes" maxDisplay={6} />
+    </section>
+
+    <!-- Quick Links -->
+    <section class="grid gap-4 md:grid-cols-3">
+      <a href="/trilhas" class="glass-card p-5 rounded-xl hover:border-synapse-cyan/50 transition-all group">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-synapse-cyan/20 flex items-center justify-center group-hover:glow-cyan transition-shadow">
+            <svg class="w-6 h-6 text-synapse-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-bright group-hover:text-synapse-cyan transition-colors">
+              Trilhas
+            </h3>
+            <p class="text-sm text-dim">Jornadas estruturadas</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="/topicos" class="glass-card p-5 rounded-xl hover:border-dendrite-violet/50 transition-all group">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-dendrite-violet/20 flex items-center justify-center group-hover:glow-violet transition-shadow">
+            <svg class="w-6 h-6 text-dendrite-violet" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-bright group-hover:text-dendrite-violet transition-colors">
+              Topicos
+            </h3>
+            <p class="text-sm text-dim">Biblioteca completa</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="/conquistas" class="glass-card p-5 rounded-xl hover:border-complete-pulse/50 transition-all group">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-complete-pulse/20 flex items-center justify-center group-hover:glow-green transition-shadow">
+            <svg class="w-6 h-6 text-complete-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-bright group-hover:text-complete-pulse transition-colors">
+              Conquistas
+            </h3>
+            <p class="text-sm text-dim">Badges e realizacoes</p>
+          </div>
+        </div>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // Hydrate streak data from localStorage
+  import { calculateStreakData } from '../utils/progressStore';
+
+  function updateStreakDisplay() {
+    const streakData = calculateStreakData();
+
+    // Update mobile streak counter
+    const mobileStreak = document.getElementById('streak-counter-mobile');
+    if (mobileStreak) {
+      const streakNumber = mobileStreak.querySelector('.text-4xl');
+      if (streakNumber) {
+        streakNumber.textContent = String(streakData.currentStreak);
+        if (streakData.currentStreak > 0) {
+          streakNumber.classList.add('text-axon-amber', 'text-glow-amber');
+          streakNumber.classList.remove('text-dormant');
+        }
+      }
+    }
+  }
+
+  // Run on page load
+  updateStreakDisplay();
+
+  // Listen for progress updates
+  window.addEventListener('progress-updated', updateStreakDisplay);
+</script>

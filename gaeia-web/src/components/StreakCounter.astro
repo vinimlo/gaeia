@@ -1,0 +1,132 @@
+---
+interface Props {
+  currentStreak: number;
+  longestStreak: number;
+  lastActiveDate?: string;
+  weekActivity?: boolean[]; // Last 7 days, true = active
+}
+
+const {
+  currentStreak,
+  longestStreak,
+  lastActiveDate,
+  weekActivity = [false, false, false, false, false, false, false]
+} = Astro.props;
+
+const isActiveToday = weekActivity[weekActivity.length - 1];
+const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+
+// Get day names for the week (starting from 7 days ago)
+const today = new Date();
+const weekDays = weekActivity.map((_, index) => {
+  const date = new Date(today);
+  date.setDate(date.getDate() - (6 - index));
+  return dayNames[date.getDay()];
+});
+---
+
+<div class="glass-card p-5 rounded-xl">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="font-display font-semibold text-bright flex items-center gap-2">
+      <svg class="w-5 h-5 text-axon-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+      </svg>
+      Sequencia de Estudos
+    </h3>
+
+    {isActiveToday && (
+      <span class="px-2 py-1 text-xs rounded-full bg-complete-pulse/20 text-complete-pulse flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-complete-pulse animate-pulse"></span>
+        Ativo hoje
+      </span>
+    )}
+  </div>
+
+  <!-- Main Streak Display -->
+  <div class="flex items-center gap-6 mb-6">
+    <div class="relative">
+      <!-- Fire icon with glow -->
+      <div class:list={[
+        'w-16 h-16 rounded-full flex items-center justify-center',
+        currentStreak > 0 ? 'bg-axon-amber/20' : 'bg-star-dust/50'
+      ]}>
+        {currentStreak > 0 ? (
+          <span class="text-4xl">🔥</span>
+        ) : (
+          <svg class="w-8 h-8 text-dormant" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+          </svg>
+        )}
+      </div>
+
+      {currentStreak > 0 && (
+        <div class="absolute -inset-1 rounded-full bg-axon-amber/20 animate-pulse -z-10"></div>
+      )}
+    </div>
+
+    <div>
+      <div class="flex items-baseline gap-2">
+        <span class:list={[
+          'text-4xl font-display font-bold',
+          currentStreak > 0 ? 'text-axon-amber text-glow-amber' : 'text-dormant'
+        ]}>
+          {currentStreak}
+        </span>
+        <span class="text-dim text-sm">
+          {currentStreak === 1 ? 'dia' : 'dias'} seguidos
+        </span>
+      </div>
+
+      <p class="text-faint text-sm mt-1">
+        Recorde: <span class="text-bright">{longestStreak} dias</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Week Activity -->
+  <div class="space-y-2">
+    <p class="text-xs text-faint">Ultimos 7 dias</p>
+    <div class="flex items-center justify-between gap-1">
+      {weekActivity.map((active, index) => (
+        <div class="flex-1 text-center">
+          <div
+            class:list={[
+              'w-full h-8 rounded-lg mb-1 flex items-center justify-center transition-all',
+              active
+                ? 'bg-complete-pulse/20 border border-complete-pulse/50'
+                : 'bg-star-dust/30 border border-transparent'
+            ]}
+          >
+            {active ? (
+              <svg class="w-4 h-4 text-complete-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <span class="w-1.5 h-1.5 rounded-full bg-dormant"></span>
+            )}
+          </div>
+          <span class="text-xs text-faint">{weekDays[index]}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Motivational message -->
+  {currentStreak === 0 && (
+    <p class="mt-4 text-sm text-dim text-center">
+      Comece a estudar hoje para iniciar sua sequencia! 🚀
+    </p>
+  )}
+  {currentStreak > 0 && currentStreak < longestStreak && (
+    <p class="mt-4 text-sm text-dim text-center">
+      Mais {longestStreak - currentStreak} dias para bater seu recorde!
+    </p>
+  )}
+  {currentStreak >= longestStreak && currentStreak > 0 && (
+    <p class="mt-4 text-sm text-complete-pulse text-center">
+      Voce esta em seu melhor momento! Continue assim! ⭐
+    </p>
+  )}
+</div>

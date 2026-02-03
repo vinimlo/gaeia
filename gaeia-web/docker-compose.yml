@@ -1,0 +1,14 @@
+services:
+  gaeia-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # Mount parent vault for content access (read-write for checkbox sync)
+      - ..:/vault
+    environment:
+      - NODE_ENV=development

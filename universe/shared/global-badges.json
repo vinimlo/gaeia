@@ -1,0 +1,86 @@
+{
+  "version": "1.0.0",
+  "badges": [
+    {
+      "id": "explorer",
+      "name": "Explorador",
+      "description": "Inicie seu primeiro curso no universo GAEIA",
+      "icon": "compass",
+      "rarity": "common",
+      "scope": "global",
+      "criteria": { "type": "courses_complete", "value": 0 }
+    },
+    {
+      "id": "dual-learner",
+      "name": "Aprendiz Dual",
+      "description": "Inicie cursos em 2 sistemas diferentes",
+      "icon": "git-branch",
+      "rarity": "rare",
+      "scope": "global",
+      "criteria": { "type": "special", "value": 2 }
+    },
+    {
+      "id": "first-course",
+      "name": "Primeiro Curso",
+      "description": "Complete seu primeiro curso no universo GAEIA",
+      "icon": "star",
+      "rarity": "epic",
+      "scope": "global",
+      "criteria": { "type": "courses_complete", "value": 1 }
+    },
+    {
+      "id": "universe-master",
+      "name": "Mestre do Universo",
+      "description": "Complete todos os cursos disponiveis",
+      "icon": "universe",
+      "rarity": "legendary",
+      "scope": "global",
+      "criteria": { "type": "courses_complete", "value": -1 }
+    },
+    {
+      "id": "streak-7",
+      "name": "Consistente",
+      "description": "Mantenha uma sequencia de 7 dias de estudo",
+      "icon": "flame",
+      "rarity": "common",
+      "scope": "global",
+      "criteria": { "type": "streak", "value": 7 }
+    },
+    {
+      "id": "streak-30",
+      "name": "Dedicado",
+      "description": "Mantenha uma sequencia de 30 dias de estudo",
+      "icon": "fire",
+      "rarity": "rare",
+      "scope": "global",
+      "criteria": { "type": "streak", "value": 30 }
+    },
+    {
+      "id": "streak-100",
+      "name": "Imparavel",
+      "description": "Mantenha uma sequencia de 100 dias de estudo",
+      "icon": "meteor",
+      "rarity": "legendary",
+      "scope": "global",
+      "criteria": { "type": "streak", "value": 100 }
+    },
+    {
+      "id": "marathonist",
+      "name": "Maratonista",
+      "description": "Complete 50 unidades em qualquer combinacao de cursos",
+      "icon": "run",
+      "rarity": "epic",
+      "scope": "global",
+      "criteria": { "type": "units_complete", "value": 50 }
+    },
+    {
+      "id": "centurion",
+      "name": "Centuriao",
+      "description": "Complete 100 unidades em qualquer combinacao de cursos",
+      "icon": "shield",
+      "rarity": "legendary",
+      "scope": "global",
+      "criteria": { "type": "units_complete", "value": 100 }
+    }
+  ]
+}

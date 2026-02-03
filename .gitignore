@@ -1,0 +1,35 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# Obsidian
+.obsidian/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+venv/
+env/
+.venv/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Playwright MCP
+.playwright-mcp/
