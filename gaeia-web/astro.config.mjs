@@ -12,8 +12,8 @@ export default defineConfig({
   ...(isStatic ? {} : {
     adapter: node({ mode: 'standalone' })
   }),
-  site: 'https://viniciusmelo.github.io',
-  base: isStatic ? '/GAEIA' : '/',
+  site: 'https://vinimlo.github.io',
+  base: isStatic ? '/gaeia' : '/',
   vite: {
     plugins: [tailwindcss()],
     define: {

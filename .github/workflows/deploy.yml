@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: gaeia-web
-        run: npm install
+        run: npm ci
 
       - name: Build Astro site (static mode)
         working-directory: gaeia-web
