@@ -12,3 +12,4 @@ services:
       - ..:/vault
     environment:
       - NODE_ENV=development
+      - PUBLIC_MODE=hybrid

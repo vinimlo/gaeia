@@ -1,6 +1,10 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+# Build argument for mode (static for GitHub Pages, hybrid for local with API)
+ARG PUBLIC_MODE=static
+ENV PUBLIC_MODE=${PUBLIC_MODE}
+
 WORKDIR /app
 
 COPY package*.json ./

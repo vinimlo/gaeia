@@ -6,9 +6,6 @@ import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos } from '../utils/trilh
 import { BADGE_DEFINITIONS, calculateEarnedBadges, getBadgesByRarity, calculateBadgeStats } from '../utils/badges';
 import type { StreakInfo } from '../utils/progress';
 
-// Disable prerendering for dynamic data
-export const prerender = false;
-
 // Load trilhas and topics data
 const trilhas = await getAllTrilhas();
 const topicos = await getAllTopicos();

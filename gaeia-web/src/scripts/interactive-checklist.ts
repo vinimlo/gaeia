@@ -4,7 +4,7 @@
  * Also hydrates inline checklist containers from markdown
  */
 
-import { recordActivity } from '../utils/progressStore';
+import { recordActivity, updateTopicoChecklist, getTopicoProgress } from '../utils/progressStore';
 
 export interface ChecklistConfig {
   container: HTMLElement;
@@ -108,34 +108,49 @@ async function toggleCheckbox(
   updateCounter(container);
 
   try {
-    // Call API to sync with Obsidian vault
-    const response = await fetch(`/api/progress/${blockSlug}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ itemIndex: index, checked: newChecked }),
-    });
+    const MODE = import.meta.env.PUBLIC_MODE || 'hybrid';
 
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.error || 'Sync failed');
+    if (MODE === 'hybrid') {
+      // Modo local: tentar API primeiro
+      const response = await fetch(`/api/progress/${blockSlug}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemIndex: index, checked: newChecked }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Sync failed');
+      }
+    } else {
+      // Modo static: salvar diretamente no localStorage
+      const progress = getTopicoProgress(blockSlug || '') || { checklist: [] as boolean[], completo: false };
+      const checklist = [...progress.checklist];
+
+      while (checklist.length <= index) {
+        checklist.push(false);
+      }
+      checklist[index] = newChecked;
+
+      updateTopicoChecklist(blockSlug || '', checklist);
     }
 
-    // Record activity for streaks
+    // Registrar atividade para streaks (ambos os modos)
     if (newChecked) {
       recordActivity();
     }
 
-    // Dispatch event for other components to react
+    // Disparar evento para outros componentes
     window.dispatchEvent(new CustomEvent('progress-updated', {
       detail: { blockSlug, itemIndex: index, checked: newChecked }
     }));
 
-    // Show success state
+    // Mostrar estado de sucesso
     if (newChecked && statusIcon) {
       (statusIcon as HTMLElement).style.opacity = '1';
     }
   } catch (error) {
-    // Revert optimistic update on error
+    // Reverter atualização otimista em caso de erro
     applyItemState(item, isChecked);
     updateCounter(container);
     showError(container, error instanceof Error ? error.message : 'Erro ao salvar');

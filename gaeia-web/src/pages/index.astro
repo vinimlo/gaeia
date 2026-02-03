@@ -8,9 +8,6 @@ import { BADGE_DEFINITIONS, calculateEarnedBadges } from '../utils/badges';
 import type { StreakInfo } from '../utils/progress';
 import type { Trilha } from '../types/trilhas';
 
-// Disable prerendering for dynamic data
-export const prerender = false;
-
 // Load trilhas and topics
 const trilhas = await getAllTrilhas();
 const topicos = await getAllTopicos();

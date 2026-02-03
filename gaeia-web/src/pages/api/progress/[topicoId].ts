@@ -1,9 +1,18 @@
-import type { APIRoute } from 'astro';
+import type { APIRoute, GetStaticPaths } from 'astro';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { VAULT_ROOT, UNIVERSE_DIR, CHECKBOX_PATTERN_GLOBAL } from '../../../utils/constants';
 
-export const prerender = false;
+// In static mode (GitHub Pages), this route is not used
+// The frontend uses localStorage directly instead
+const isStaticMode = import.meta.env.PUBLIC_MODE === 'static';
+export const prerender = isStaticMode;
+
+// In static mode, provide empty paths (route won't be generated)
+// In hybrid mode, this is not called because prerender = false
+export const getStaticPaths: GetStaticPaths = () => {
+  return [];
+};
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   const { topicoId } = params;

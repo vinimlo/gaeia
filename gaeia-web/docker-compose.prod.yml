@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.prod
+      args:
+        - PUBLIC_MODE=static
     ports:
       - "3000:80"
     restart: unless-stopped
