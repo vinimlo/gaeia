@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllTopicos, getAllTags, getTopicoTrilhas } from '../../utils/trilhas';
 import type { Topico } from '../../types/trilhas';
+import { url } from '../../utils/url';
 
 // Load all topics and tags
 const topicos = await getAllTopicos();
@@ -106,7 +107,7 @@ for (const topico of topicos) {
     <section id="topics-grid" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {topicos.map((topico) => (
         <a
-          href={`/topicos/${topico.id}`}
+          href={url(`/topicos/${topico.id}`)}
           class="topic-card glass-card p-5 rounded-xl hover:border-synapse-cyan/50 transition-all group"
           data-tags={topico.tags.join(',')}
           data-titulo={topico.titulo.toLowerCase()}

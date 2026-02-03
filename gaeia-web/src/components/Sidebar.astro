@@ -2,6 +2,7 @@
 import ProgressRing from './ProgressRing.astro';
 import GaeiaLogo from './GaeiaLogo.astro';
 import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos } from '../utils/trilhas';
+import { url } from '../utils/url';
 
 // Load trilhas for navigation
 const trilhas = await getAllTrilhas();
@@ -23,28 +24,28 @@ interface NavItem {
 const navigation: NavItem[] = [
   {
     label: 'Inicio',
-    href: '/',
+    href: url('/'),
     icon: 'home'
   },
   {
     label: 'Trilhas',
-    href: '/trilhas',
+    href: url('/trilhas'),
     icon: 'book',
     badge: `${trilhas.length}`,
     children: trilhas.map(trilha => ({
       label: trilha.nome,
-      href: `/trilhas/${trilha.id}`,
+      href: url(`/trilhas/${trilha.id}`),
     }))
   },
   {
     label: 'Topicos',
-    href: '/topicos',
+    href: url('/topicos'),
     icon: 'tag',
     badge: `${totalTopicos}`
   },
   {
     label: 'Conquistas',
-    href: '/conquistas',
+    href: url('/conquistas'),
     icon: 'trophy'
   }
 ];
@@ -62,7 +63,7 @@ const currentPath = Astro.url.pathname;
 <aside class="fixed left-0 top-0 z-40 h-screen w-[280px] bg-nebula/95 backdrop-blur-md border-r border-star-dust/50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto">
   <!-- Logo -->
   <div class="p-6 border-b border-star-dust/50">
-    <a href="/" class="flex items-center gap-3 group">
+    <a href={url('/')} class="flex items-center gap-3 group">
       <div class="w-10 h-10 rounded-xl bg-star-dust/30 flex items-center justify-center group-hover:bg-star-dust/50 transition-all">
         <GaeiaLogo size={32} animated={true} />
       </div>

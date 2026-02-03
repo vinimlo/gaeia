@@ -4,6 +4,7 @@ import ProgressBar from '../../components/ProgressBar.astro';
 import { getAllTopicos, getTopico, getTopicoTrilhas, getTopicosByTag } from '../../utils/trilhas';
 import { renderMarkdownAsync } from '../../utils/markdown';
 import type { Topico } from '../../types/trilhas';
+import { url } from '../../utils/url';
 
 export async function getStaticPaths() {
   const topicos = await getAllTopicos();
@@ -16,7 +17,7 @@ const { topico: topicoId } = Astro.params;
 const topico = await getTopico(topicoId);
 
 if (!topico) {
-  return Astro.redirect('/topicos');
+  return Astro.redirect(url('/topicos'));
 }
 
 // Get trilhas that contain this topic
@@ -56,7 +57,7 @@ const nivelColors: Record<string, string> = {
   <article class="animate-fade-in">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 mb-6 text-sm">
-      <a href="/topicos" class="text-dim hover:text-synapse-cyan transition-colors">
+      <a href={url('/topicos')} class="text-dim hover:text-synapse-cyan transition-colors">
         Topicos
       </a>
       <span class="text-dim">/</span>
@@ -93,7 +94,7 @@ const nivelColors: Record<string, string> = {
       <div class="flex flex-wrap gap-2 mb-6">
         {topico.tags.map(tag => (
           <a
-            href={`/topicos?tag=${tag}`}
+            href={url(`/topicos?tag=${tag}`)}
             class="px-3 py-1 rounded-full bg-star-dust/20 text-sm text-dim hover:bg-star-dust/30 hover:text-bright transition-colors"
           >
             {tag}
@@ -123,7 +124,7 @@ const nivelColors: Record<string, string> = {
         <div class="flex flex-wrap gap-2">
           {topicoTrilhas.trilhas.map(({ trilha, modulo }) => (
             <a
-              href={`/trilhas/${trilha.id}/${topico.id}`}
+              href={url(`/trilhas/${trilha.id}/${topico.id}`)}
               class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-deep-space/50 border border-star-dust/20 hover:border-synapse-cyan/30 transition-colors"
             >
               <span class="text-bright text-sm">{trilha.nome}</span>
@@ -149,7 +150,7 @@ const nivelColors: Record<string, string> = {
         <div class="flex flex-wrap gap-2">
           {topico.prerequisitos.map(prereqId => (
             <a
-              href={`/topicos/${prereqId}`}
+              href={url(`/topicos/${prereqId}`)}
               class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-axon-amber/10 text-axon-amber text-sm hover:bg-axon-amber/20 transition-colors"
             >
               {prereqId}
@@ -177,7 +178,7 @@ const nivelColors: Record<string, string> = {
         <div class="grid gap-3 md:grid-cols-2">
           {relatedTopicos.map(related => (
             <a
-              href={`/topicos/${related.id}`}
+              href={url(`/topicos/${related.id}`)}
               class="glass-card p-4 rounded-lg hover:border-synapse-cyan/30 transition-colors group"
             >
               <h3 class="font-medium text-bright group-hover:text-synapse-cyan transition-colors mb-1">
@@ -198,7 +199,7 @@ const nivelColors: Record<string, string> = {
     <!-- Back to Library -->
     <nav class="mt-12 pt-8 border-t border-star-dust/50">
       <a
-        href="/topicos"
+        href={url('/topicos')}
         class="flex items-center gap-2 text-dim hover:text-synapse-cyan transition-colors"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

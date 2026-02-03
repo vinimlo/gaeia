@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProgressBar from '../../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilhaTopicoIds } from '../../utils/trilhas';
+import { url } from '../../utils/url';
 
 // Load all trilhas
 const trilhas = await getAllTrilhas();
@@ -47,7 +48,7 @@ const nivelColors: Record<string, string> = {
 
         return (
           <a
-            href={`/trilhas/${trilha.id}`}
+            href={url(`/trilhas/${trilha.id}`)}
             class="glass-card p-6 rounded-xl hover:border-synapse-cyan/50 transition-all group"
           >
             <div class="flex items-start gap-4">

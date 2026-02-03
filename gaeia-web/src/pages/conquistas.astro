@@ -5,6 +5,7 @@ import ProgressBar from '../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos } from '../utils/trilhas';
 import { BADGE_DEFINITIONS, calculateEarnedBadges, getBadgesByRarity, calculateBadgeStats } from '../utils/badges';
 import type { StreakInfo } from '../utils/progress';
+import { url } from '../utils/url';
 
 // Load trilhas and topics data
 const trilhas = await getAllTrilhas();
@@ -170,7 +171,7 @@ const rarityNames = {
         praticando e conquistando novos marcos em sua carreira de IA.
       </p>
       <a
-        href="/trilhas"
+        href={url('/trilhas')}
         class="inline-flex items-center gap-2 px-6 py-3 bg-synapse-cyan/20 hover:bg-synapse-cyan/30 border border-synapse-cyan/50 rounded-lg text-synapse-cyan font-medium transition-all hover:glow-cyan"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

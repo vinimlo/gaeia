@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ProgressRing from '../components/ProgressRing.astro';
+import { url } from '../utils/url';
 
 interface Props {
   title: string;
@@ -64,7 +65,7 @@ const {
     <nav class="mb-8" aria-label="Breadcrumb">
       <ol class="flex items-center gap-2 text-sm">
         <li>
-          <a href="/roadmap" class="text-dim hover:text-synapse-cyan transition-colors">
+          <a href={url('/roadmap')} class="text-dim hover:text-synapse-cyan transition-colors">
             Roadmap
           </a>
         </li>
@@ -81,7 +82,7 @@ const {
     <!-- Back to Roadmap -->
     <nav class="mt-12 pt-8 border-t border-star-dust/50">
       <a
-        href="/roadmap"
+        href={url('/roadmap')}
         class="inline-flex items-center gap-2 text-dim hover:text-dendrite-violet transition-colors"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

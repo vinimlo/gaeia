@@ -4,6 +4,7 @@ import ProgressBar from '../../../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilha, getTopico, getTopicoNavigation, getTrilhaTopicoIds } from '../../../utils/trilhas';
 import { renderMarkdownAsync } from '../../../utils/markdown';
 import type { Trilha, Topico, TopicoNavigation } from '../../../types/trilhas';
+import { url } from '../../../utils/url';
 
 export async function getStaticPaths() {
   const trilhas = await getAllTrilhas();
@@ -28,7 +29,7 @@ const topico = await getTopico(topicoId);
 const navigation = await getTopicoNavigation(trilhaId, topicoId);
 
 if (!trilha || !topico || !navigation) {
-  return Astro.redirect('/trilhas');
+  return Astro.redirect(url('/trilhas'));
 }
 
 // Render markdown content
@@ -52,11 +53,11 @@ const nivelColors: Record<string, string> = {
   <article class="animate-fade-in">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 mb-6 text-sm">
-      <a href="/trilhas" class="text-dim hover:text-synapse-cyan transition-colors">
+      <a href={url('/trilhas')} class="text-dim hover:text-synapse-cyan transition-colors">
         Trilhas
       </a>
       <span class="text-dim">/</span>
-      <a href={`/trilhas/${trilha.id}`} class="text-dim hover:text-synapse-cyan transition-colors">
+      <a href={url(`/trilhas/${trilha.id}`)} class="text-dim hover:text-synapse-cyan transition-colors">
         {trilha.nome}
       </a>
       <span class="text-dim">/</span>
@@ -117,7 +118,7 @@ const nivelColors: Record<string, string> = {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         Este topico tambem pode ser acessado em
-        <a href={`/topicos/${topico.id}`} class="text-synapse-cyan hover:underline">
+        <a href={url(`/topicos/${topico.id}`)} class="text-synapse-cyan hover:underline">
           /topicos/{topico.id}
         </a>
       </p>
@@ -127,7 +128,7 @@ const nivelColors: Record<string, string> = {
     <nav class="mt-12 flex justify-between items-center pt-8 border-t border-star-dust/50">
       {navigation.anterior ? (
         <a
-          href={`/trilhas/${trilha.id}/${navigation.anterior}`}
+          href={url(`/trilhas/${trilha.id}/${navigation.anterior}`)}
           class="flex items-center gap-2 text-dim hover:text-synapse-cyan transition-colors"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +138,7 @@ const nivelColors: Record<string, string> = {
         </a>
       ) : (
         <a
-          href={`/trilhas/${trilha.id}`}
+          href={url(`/trilhas/${trilha.id}`)}
           class="flex items-center gap-2 text-dim hover:text-synapse-cyan transition-colors"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,7 +154,7 @@ const nivelColors: Record<string, string> = {
 
       {navigation.proximo ? (
         <a
-          href={`/trilhas/${trilha.id}/${navigation.proximo}`}
+          href={url(`/trilhas/${trilha.id}/${navigation.proximo}`)}
           class="flex items-center gap-2 text-dim hover:text-synapse-cyan transition-colors"
         >
           Proximo
@@ -163,7 +164,7 @@ const nivelColors: Record<string, string> = {
         </a>
       ) : (
         <a
-          href={`/trilhas/${trilha.id}`}
+          href={url(`/trilhas/${trilha.id}`)}
           class="flex items-center gap-2 text-complete-pulse hover:text-complete-pulse/80 transition-colors"
         >
           Concluir Trilha

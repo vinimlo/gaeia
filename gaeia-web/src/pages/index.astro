@@ -7,6 +7,7 @@ import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos, getAllTags } from '..
 import { BADGE_DEFINITIONS, calculateEarnedBadges } from '../utils/badges';
 import type { StreakInfo } from '../utils/progress';
 import type { Trilha } from '../types/trilhas';
+import { url } from '../utils/url';
 
 // Load trilhas and topics
 const trilhas = await getAllTrilhas();
@@ -68,7 +69,7 @@ const iconMap: Record<string, string> = {
 
           return (
             <a
-              href={`/trilhas/${trilha.id}`}
+              href={url(`/trilhas/${trilha.id}`)}
               class="glass-card p-6 rounded-xl hover:border-synapse-cyan/50 transition-all group"
             >
               <div class="flex items-start gap-4">
@@ -115,7 +116,7 @@ const iconMap: Record<string, string> = {
           </svg>
           Explorar Topicos
         </h2>
-        <a href="/topicos" class="text-sm text-synapse-cyan hover:underline">
+        <a href={url('/topicos')} class="text-sm text-synapse-cyan hover:underline">
           Ver todos ({topicosCount}) &rarr;
         </a>
       </div>
@@ -123,7 +124,7 @@ const iconMap: Record<string, string> = {
       <div class="flex flex-wrap gap-2">
         {allTags.slice(0, 12).map(tag => (
           <a
-            href={`/topicos?tag=${tag}`}
+            href={url(`/topicos?tag=${tag}`)}
             class="px-3 py-1.5 rounded-full bg-star-dust/20 text-sm text-dim hover:bg-synapse-cyan/20 hover:text-synapse-cyan transition-colors"
           >
             {tag}
@@ -144,7 +145,7 @@ const iconMap: Record<string, string> = {
 
     <!-- Quick Links -->
     <section class="grid gap-4 md:grid-cols-3">
-      <a href="/trilhas" class="glass-card p-5 rounded-xl hover:border-synapse-cyan/50 transition-all group">
+      <a href={url('/trilhas')} class="glass-card p-5 rounded-xl hover:border-synapse-cyan/50 transition-all group">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl bg-synapse-cyan/20 flex items-center justify-center group-hover:glow-cyan transition-shadow">
             <svg class="w-6 h-6 text-synapse-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,7 +161,7 @@ const iconMap: Record<string, string> = {
         </div>
       </a>
 
-      <a href="/topicos" class="glass-card p-5 rounded-xl hover:border-dendrite-violet/50 transition-all group">
+      <a href={url('/topicos')} class="glass-card p-5 rounded-xl hover:border-dendrite-violet/50 transition-all group">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl bg-dendrite-violet/20 flex items-center justify-center group-hover:glow-violet transition-shadow">
             <svg class="w-6 h-6 text-dendrite-violet" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +177,7 @@ const iconMap: Record<string, string> = {
         </div>
       </a>
 
-      <a href="/conquistas" class="glass-card p-5 rounded-xl hover:border-complete-pulse/50 transition-all group">
+      <a href={url('/conquistas')} class="glass-card p-5 rounded-xl hover:border-complete-pulse/50 transition-all group">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl bg-complete-pulse/20 flex items-center justify-center group-hover:glow-green transition-shadow">
             <svg class="w-6 h-6 text-complete-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
