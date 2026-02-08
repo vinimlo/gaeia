@@ -64,7 +64,7 @@ const trilhas = await getAllTrilhas();
                 </div>
 
                 <!-- Progress placeholder - will be hydrated client-side -->
-                <div class="mt-4" data-trilha-progress={trilha.id}>
+                <div class="mt-4" data-trilha-progress={trilha.id} data-trilha-topicos={JSON.stringify(getTrilhaTopicoIds(trilha))}>
                   <div class="flex items-center justify-between mb-1">
                     <span class="text-xs text-dim">Progresso</span>
                     <span class="text-xs font-medium text-synapse-cyan">0%</span>

@@ -299,6 +299,16 @@ function initializeInlineChecklists(): void {
         || document.querySelector('[data-topico-progress]');
       const blockSlug = pageContainer?.getAttribute('data-topico-progress') || '';
 
+      // Merge saved progress from localStorage before rendering
+      const savedProgress = getTopicoProgress(blockSlug);
+      if (savedProgress && savedProgress.checklist.length > 0) {
+        items.forEach((item, index) => {
+          if (index < savedProgress.checklist.length) {
+            item.checked = savedProgress.checklist[index];
+          }
+        });
+      }
+
       // Render the interactive checklist
       renderInlineChecklist(container, items, blockSlug);
     } catch (e) {

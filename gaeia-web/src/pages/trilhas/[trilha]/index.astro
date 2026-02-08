@@ -86,7 +86,7 @@ const totalHoras = Math.round(totalMinutos / 60);
       </div>
 
       <!-- Progress -->
-      <div class="glass-card p-4 rounded-lg" data-trilha-progress={trilha.id}>
+      <div class="glass-card p-4 rounded-lg" data-trilha-progress={trilha.id} data-trilha-topicos={JSON.stringify(getTrilhaTopicoIds(trilha))}>
         <div class="flex items-center justify-between mb-2">
           <span class="text-sm text-dim">Progresso da Trilha</span>
           <span class="text-sm font-medium text-synapse-cyan">0/{totalTopicos} topicos</span>
@@ -190,6 +190,4 @@ const totalHoras = Math.round(totalMinutos / 60);
   </div>
 </BaseLayout>
 
-<script>
-  // Client-side hydration for progress will be added when progressStore is updated
-</script>
+<!-- Progress hydration handled by progress-hydrator.ts (loaded in BaseLayout) -->

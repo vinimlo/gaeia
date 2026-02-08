@@ -71,7 +71,7 @@ const badges = calculateEarnedBadges();
                   </div>
 
                   <!-- Progress placeholder -->
-                  <div class="mt-3" data-trilha-progress={trilha.id}>
+                  <div class="mt-3" data-trilha-progress={trilha.id} data-trilha-topicos={JSON.stringify(getTrilhaTopicoIds(trilha))}>
                     <ProgressBar value={0} height={4} />
                   </div>
                 </div>
