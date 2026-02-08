@@ -7,6 +7,8 @@ import type { Topico } from '../../types/trilhas';
 import { NIVEL_LABELS, NIVEL_COLORS_PILL, NIVEL_COLORS_TEXT } from '../../utils/uiConstants';
 import { url } from '../../utils/url';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const topicos = await getAllTopicos();
   return topicos.map(topico => ({

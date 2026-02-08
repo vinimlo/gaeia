@@ -8,7 +8,7 @@ export default defineConfig({
   // Astro 5: output 'static' is default and supports per-page SSR opt-in
   // In static mode (GitHub Pages), no adapter needed
   // In local mode, use node adapter for API routes
-  output: 'static',
+  output: isStatic ? 'static' : 'server',
   ...(isStatic ? {} : {
     adapter: node({ mode: 'standalone' })
   }),

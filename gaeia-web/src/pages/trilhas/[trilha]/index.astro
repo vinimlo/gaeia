@@ -6,6 +6,8 @@ import type { Trilha, Topico } from '../../../types/trilhas';
 import { NIVEL_LABELS, NIVEL_COLORS_BADGE } from '../../../utils/uiConstants';
 import { url } from '../../../utils/url';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const trilhas = await getAllTrilhas();
   return trilhas.map(trilha => ({

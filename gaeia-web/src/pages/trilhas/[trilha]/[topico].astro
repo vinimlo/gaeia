@@ -7,6 +7,8 @@ import type { Trilha, Topico, TopicoNavigation } from '../../../types/trilhas';
 import { NIVEL_LABELS, NIVEL_COLORS_PILL } from '../../../utils/uiConstants';
 import { url } from '../../../utils/url';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const trilhas = await getAllTrilhas();
   const paths = [];
