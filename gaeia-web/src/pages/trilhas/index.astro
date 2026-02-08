@@ -2,29 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProgressBar from '../../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilhaTopicoIds } from '../../utils/trilhas';
+import { TRILHA_ICON_PATHS, NIVEL_LABELS, NIVEL_COLORS_TEXT } from '../../utils/uiConstants';
 import { url } from '../../utils/url';
 
 // Load all trilhas
 const trilhas = await getAllTrilhas();
-
-// Icon mapping
-const iconMap: Record<string, string> = {
-  brain: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
-  rocket: 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
-};
-
-// Level labels
-const nivelLabels: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediario',
-  avancado: 'Avancado',
-};
-
-const nivelColors: Record<string, string> = {
-  iniciante: 'text-complete-pulse',
-  intermediario: 'text-axon-amber',
-  avancado: 'text-alarm-red',
-};
 ---
 
 <BaseLayout title="Trilhas de Aprendizado">
@@ -44,7 +26,7 @@ const nivelColors: Record<string, string> = {
     <section class="grid gap-6 md:grid-cols-2">
       {trilhas.map((trilha) => {
         const totalTopicos = getTrilhaTopicoIds(trilha).length;
-        const icon = iconMap[trilha.icone] || iconMap.brain;
+        const icon = TRILHA_ICON_PATHS[trilha.icone] || TRILHA_ICON_PATHS.brain;
 
         return (
           <a
@@ -70,8 +52,8 @@ const nivelColors: Record<string, string> = {
                 </p>
 
                 <div class="flex items-center gap-4 text-sm">
-                  <span class={`font-medium ${nivelColors[trilha.nivel]}`}>
-                    {nivelLabels[trilha.nivel]}
+                  <span class={`font-medium ${NIVEL_COLORS_TEXT[trilha.nivel]}`}>
+                    {NIVEL_LABELS[trilha.nivel]}
                   </span>
                   <span class="text-dim">
                     {totalTopicos} topicos
@@ -82,7 +64,7 @@ const nivelColors: Record<string, string> = {
                 </div>
 
                 <!-- Progress placeholder - will be hydrated client-side -->
-                <div class="mt-4" data-trilha-progress={trilha.id}>
+                <div class="mt-4" data-trilha-progress={trilha.id} data-trilha-topicos={JSON.stringify(getTrilhaTopicoIds(trilha))}>
                   <div class="flex items-center justify-between mb-1">
                     <span class="text-xs text-dim">Progresso</span>
                     <span class="text-xs font-medium text-synapse-cyan">0%</span>
@@ -124,7 +106,7 @@ const nivelColors: Record<string, string> = {
             {trilhas.map((trilha) => (
               <tr class="border-b border-star-dust/20">
                 <td class="py-3 px-4 font-medium text-bright">{trilha.nome}</td>
-                <td class={`py-3 px-4 ${nivelColors[trilha.nivel]}`}>{nivelLabels[trilha.nivel]}</td>
+                <td class={`py-3 px-4 ${NIVEL_COLORS_TEXT[trilha.nivel]}`}>{NIVEL_LABELS[trilha.nivel]}</td>
                 <td class="py-3 px-4 text-dim">{getTrilhaTopicoIds(trilha).length}</td>
                 <td class="py-3 px-4 text-dim">~{trilha.horasEstimadas}h</td>
                 <td class="py-3 px-4 text-dim line-clamp-1">{trilha.descricao}</td>

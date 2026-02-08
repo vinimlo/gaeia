@@ -4,7 +4,10 @@ import ProgressBar from '../../components/ProgressBar.astro';
 import { getAllTopicos, getTopico, getTopicoTrilhas, getTopicosByTag } from '../../utils/trilhas';
 import { renderMarkdownAsync } from '../../utils/markdown';
 import type { Topico } from '../../types/trilhas';
+import { NIVEL_LABELS, NIVEL_COLORS_PILL, NIVEL_COLORS_TEXT } from '../../utils/uiConstants';
 import { url } from '../../utils/url';
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const topicos = await getAllTopicos();
@@ -38,19 +41,6 @@ for (const tag of topico.tags.slice(0, 2)) {
 
 // Render markdown content
 const renderedContent = await renderMarkdownAsync(topico.content);
-
-// Level labels
-const nivelLabels: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediario',
-  avancado: 'Avancado',
-};
-
-const nivelColors: Record<string, string> = {
-  iniciante: 'text-complete-pulse bg-complete-pulse/15 border border-complete-pulse/30',
-  intermediario: 'text-axon-amber bg-axon-amber/15 border border-axon-amber/30',
-  avancado: 'text-alarm-red bg-alarm-red/15 border border-alarm-red/30',
-};
 ---
 
 <BaseLayout title={topico.titulo}>
@@ -67,8 +57,8 @@ const nivelColors: Record<string, string> = {
     <!-- Header -->
     <header class="mb-8">
       <div class="flex flex-wrap items-center gap-3 mb-4">
-        <span class={`px-3 py-1 rounded-full text-sm font-medium ${nivelColors[topico.nivel]}`}>
-          {nivelLabels[topico.nivel]}
+        <span class={`px-3 py-1 rounded-full text-sm font-medium ${NIVEL_COLORS_PILL[topico.nivel]}`}>
+          {NIVEL_LABELS[topico.nivel]}
         </span>
         <span class="text-dim text-sm flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,8 +175,8 @@ const nivelColors: Record<string, string> = {
                 {related.titulo}
               </h3>
               <div class="flex items-center gap-2 text-xs text-dim">
-                <span class={nivelColors[related.nivel].split(' ')[0]}>
-                  {nivelLabels[related.nivel]}
+                <span class={NIVEL_COLORS_TEXT[related.nivel]}>
+                  {NIVEL_LABELS[related.nivel]}
                 </span>
                 <span>~{related.tempoEstimado} min</span>
               </div>

@@ -13,20 +13,15 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 import { VAULT_ROOT, UNIVERSE_DIR, FRONTMATTER_PATTERN } from './constants';
 import { createLogger } from './logger';
-import { parseChecklist, type ChecklistItem } from './checklist';
+import { parseChecklist } from './checklist';
 import type {
   TrilhasCatalog,
   Trilha,
   TrilhaModulo,
   Topico,
-  TopicoFrontmatter,
   TopicosIndex,
-  TopicoIndexEntry,
   TopicoNavigation,
   TopicoTrilhas,
-  TrilhaWithTopicos,
-  ModuloWithTopicos,
-  TrilhasSummary,
 } from '../types/trilhas';
 
 const log = createLogger('trilhas');
@@ -35,20 +30,12 @@ const log = createLogger('trilhas');
 // Cache
 // ============================================
 
-let catalogCache: TrilhasCatalog | null = null;
-let trilhasCache: Map<string, Trilha> = new Map();
-let topicosIndexCache: TopicosIndex | null = null;
-let topicosCache: Map<string, Topico> = new Map();
-
-/**
- * Clear all caches (useful for dev hot-reloading)
- */
-export function clearTrilhasCaches(): void {
-  catalogCache = null;
-  trilhasCache.clear();
-  topicosIndexCache = null;
-  topicosCache.clear();
-}
+const cache = {
+  catalog: null as TrilhasCatalog | null,
+  trilhas: new Map<string, Trilha>(),
+  topicosIndex: null as TopicosIndex | null,
+  topicos: new Map<string, Topico>(),
+};
 
 // ============================================
 // Path Helpers
@@ -57,25 +44,8 @@ export function clearTrilhasCaches(): void {
 /**
  * Get the full path to the universe directory
  */
-export function getUniversePath(): string {
+function getUniversePath(): string {
   return join(VAULT_ROOT, UNIVERSE_DIR);
-}
-
-/**
- * Check if the new trilhas structure exists
- */
-export function trilhasExist(): boolean {
-  const catalogPath = join(getUniversePath(), '_catalog.json');
-  if (!existsSync(catalogPath)) return false;
-
-  try {
-    const content = require('fs').readFileSync(catalogPath, 'utf-8');
-    const catalog = JSON.parse(content);
-    // Check if it's the new format with trilhas array
-    return Array.isArray(catalog.trilhas);
-  } catch {
-    return false;
-  }
 }
 
 // ============================================
@@ -86,7 +56,7 @@ export function trilhasExist(): boolean {
  * Load the catalog
  */
 export async function getCatalog(): Promise<TrilhasCatalog | null> {
-  if (catalogCache) return catalogCache;
+  if (cache.catalog) return cache.catalog;
 
   const catalogPath = join(getUniversePath(), '_catalog.json');
 
@@ -97,8 +67,8 @@ export async function getCatalog(): Promise<TrilhasCatalog | null> {
 
   try {
     const content = await readFile(catalogPath, 'utf-8');
-    catalogCache = JSON.parse(content) as TrilhasCatalog;
-    return catalogCache;
+    cache.catalog = JSON.parse(content) as TrilhasCatalog;
+    return cache.catalog;
   } catch (error) {
     log.error('Failed to read catalog:', error);
     return null;
@@ -114,8 +84,8 @@ export async function getCatalog(): Promise<TrilhasCatalog | null> {
  */
 export async function getTrilha(trilhaId: string): Promise<Trilha | null> {
   // Check cache
-  if (trilhasCache.has(trilhaId)) {
-    return trilhasCache.get(trilhaId)!;
+  if (cache.trilhas.has(trilhaId)) {
+    return cache.trilhas.get(trilhaId)!;
   }
 
   const catalog = await getCatalog();
@@ -138,7 +108,7 @@ export async function getTrilha(trilhaId: string): Promise<Trilha | null> {
   try {
     const content = await readFile(trilhaPath, 'utf-8');
     const trilha = JSON.parse(content) as Trilha;
-    trilhasCache.set(trilhaId, trilha);
+    cache.trilhas.set(trilhaId, trilha);
     return trilha;
   } catch (error) {
     log.error(`Failed to read trilha ${trilhaId}:`, error);
@@ -175,8 +145,8 @@ export function getTrilhaTopicoIds(trilha: Trilha): string[] {
 /**
  * Get the topicos index
  */
-export async function getTopicosIndex(): Promise<TopicosIndex | null> {
-  if (topicosIndexCache) return topicosIndexCache;
+async function getTopicosIndex(): Promise<TopicosIndex | null> {
+  if (cache.topicosIndex) return cache.topicosIndex;
 
   const catalog = await getCatalog();
   if (!catalog) return null;
@@ -194,8 +164,8 @@ export async function getTopicosIndex(): Promise<TopicosIndex | null> {
 
   try {
     const content = await readFile(indexPath, 'utf-8');
-    topicosIndexCache = JSON.parse(content) as TopicosIndex;
-    return topicosIndexCache;
+    cache.topicosIndex = JSON.parse(content) as TopicosIndex;
+    return cache.topicosIndex;
   } catch (error) {
     log.error('Failed to read topicos index:', error);
     return null;
@@ -291,8 +261,8 @@ function parseFrontmatter(content: string): {
  */
 export async function getTopico(topicoId: string): Promise<Topico | null> {
   // Check cache
-  if (topicosCache.has(topicoId)) {
-    return topicosCache.get(topicoId)!;
+  if (cache.topicos.has(topicoId)) {
+    return cache.topicos.get(topicoId)!;
   }
 
   const catalog = await getCatalog();
@@ -326,7 +296,7 @@ export async function getTopico(topicoId: string): Promise<Topico | null> {
       checklistItems: parseChecklist(body),
     };
 
-    topicosCache.set(topicoId, topico);
+    cache.topicos.set(topicoId, topico);
     return topico;
   } catch (error) {
     log.error(`Failed to read topico ${topicoId}:`, error);
@@ -456,94 +426,6 @@ export async function getTopicoTrilhas(topicoId: string): Promise<TopicoTrilhas>
 }
 
 // ============================================
-// Summary Functions
-// ============================================
-
-/**
- * Get summary of all trilhas for home page
- */
-export async function getTrilhasSummary(): Promise<TrilhasSummary> {
-  const trilhas = await getAllTrilhas();
-  const allTopicoIds = new Set<string>();
-
-  const summary: TrilhasSummary = {
-    trilhas: [],
-    totalTopicos: 0,
-    topicosUnicos: 0,
-  };
-
-  for (const trilha of trilhas) {
-    const topicoIds = getTrilhaTopicoIds(trilha);
-    topicoIds.forEach(id => allTopicoIds.add(id));
-
-    summary.trilhas.push({
-      trilha,
-      progresso: 0, // Will be calculated client-side with progress data
-      topicosCompletos: 0,
-      totalTopicos: topicoIds.length,
-    });
-
-    summary.totalTopicos += topicoIds.length;
-  }
-
-  summary.topicosUnicos = allTopicoIds.size;
-  return summary;
-}
-
-/**
- * Get a trilha with all topics loaded
- */
-export async function getTrilhaWithTopicos(trilhaId: string): Promise<TrilhaWithTopicos | null> {
-  const trilha = await getTrilha(trilhaId);
-  if (!trilha) return null;
-
-  const topicos = await getTrilhaTopicos(trilhaId);
-
-  return {
-    ...trilha,
-    topicosCarregados: topicos.map(t => ({
-      ...t,
-      completo: false,
-      progresso: 0,
-    })),
-    progresso: 0,
-    topicosCompletos: 0,
-    totalTopicos: topicos.length,
-  };
-}
-
-/**
- * Get a module with all topics loaded
- */
-export async function getModuloWithTopicos(
-  trilhaId: string,
-  moduloId: string
-): Promise<ModuloWithTopicos | null> {
-  const trilha = await getTrilha(trilhaId);
-  if (!trilha) return null;
-
-  const modulo = trilha.modulos.find(m => m.id === moduloId);
-  if (!modulo) return null;
-
-  const topicos: Topico[] = [];
-  for (const id of modulo.topicos) {
-    const topico = await getTopico(id);
-    if (topico) topicos.push(topico);
-  }
-
-  return {
-    ...modulo,
-    topicosCarregados: topicos.map(t => ({
-      ...t,
-      completo: false,
-      progresso: 0,
-    })),
-    progresso: 0,
-    completo: false,
-  };
-}
-
-// ============================================
 // Utility Functions
 // ============================================
 
@@ -562,10 +444,3 @@ export async function getAllTags(): Promise<string[]> {
   return Array.from(tags).sort();
 }
 
-/**
- * Calculate total estimated hours for a trilha
- */
-export async function getTrilhaHours(trilhaId: string): Promise<number> {
-  const topicos = await getTrilhaTopicos(trilhaId);
-  return topicos.reduce((sum, t) => sum + t.tempoEstimado, 0);
-}

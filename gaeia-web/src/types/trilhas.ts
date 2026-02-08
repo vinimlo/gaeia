@@ -84,16 +84,6 @@ export interface Topico extends TopicoFrontmatter {
   checklistItems: ChecklistItem[];
 }
 
-/**
- * Topic with progress info
- */
-export interface TopicoWithProgress extends Topico {
-  completo: boolean;
-  progresso: number;
-  dataInicio?: string;
-  dataConclusao?: string;
-}
-
 // ============================================
 // Trilha (Learning Path) Types
 // ============================================
@@ -142,25 +132,6 @@ export interface Trilha {
   badges: TrilhaBadge[];
 }
 
-/**
- * Trilha with fully loaded topics
- */
-export interface TrilhaWithTopicos extends Trilha {
-  topicosCarregados: TopicoWithProgress[];
-  progresso: number;
-  topicosCompletos: number;
-  totalTopicos: number;
-}
-
-/**
- * Module with loaded topics
- */
-export interface ModuloWithTopicos extends TrilhaModulo {
-  topicosCarregados: TopicoWithProgress[];
-  progresso: number;
-  completo: boolean;
-}
-
 // ============================================
 // Navigation Types
 // ============================================
@@ -203,43 +174,3 @@ export interface TopicoProgress {
   dataConclusao?: string;
 }
 
-/**
- * Global progress data (stored in localStorage)
- */
-export interface GaeiaProgressData {
-  topicos: Record<string, TopicoProgress>;
-  streak: {
-    atual: number;
-    maximo: number;
-    ultimoDia: string;
-  };
-  badges: string[];
-}
-
-// ============================================
-// API Response Types
-// ============================================
-
-/**
- * Summary of all trilhas for the home page
- */
-export interface TrilhasSummary {
-  trilhas: {
-    trilha: Trilha;
-    progresso: number;
-    topicosCompletos: number;
-    totalTopicos: number;
-  }[];
-  totalTopicos: number;
-  topicosUnicos: number;
-}
-
-/**
- * Topic search result
- */
-export interface TopicoSearchResult {
-  topico: Topico;
-  relevance: number;
-  matchedTags: string[];
-  trilhas: string[];
-}

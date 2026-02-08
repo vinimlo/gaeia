@@ -75,7 +75,7 @@ const currentPath = Astro.url.pathname;
   </div>
 
   <!-- Progress Overview (client-hydrated) -->
-  <div class="p-4 mx-4 mt-4 rounded-xl bg-star-dust/30" id="sidebar-progress">
+  <div class="p-4 mx-4 mt-4 rounded-xl bg-star-dust/30" id="sidebar-progress" data-total-topicos={totalTopicos}>
     <div class="flex items-center gap-3">
       <ProgressRing value={0} size={48} strokeWidth={4} />
       <div>
@@ -167,21 +167,4 @@ const currentPath = Astro.url.pathname;
   </div>
 </aside>
 
-<script>
-  // Hydrate progress from localStorage
-  import { getCompletedTopicosCount } from '../utils/progressStore';
-
-  function updateSidebarProgress() {
-    const count = getCompletedTopicosCount();
-    const progressText = document.getElementById('sidebar-progress-text');
-    if (progressText) {
-      progressText.textContent = `${count} topicos completos`;
-    }
-  }
-
-  // Run on page load
-  updateSidebarProgress();
-
-  // Listen for progress updates
-  window.addEventListener('progress-updated', updateSidebarProgress);
-</script>
+<!-- Sidebar progress is hydrated by progress-hydrator.ts (loaded in BaseLayout) -->

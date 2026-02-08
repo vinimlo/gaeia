@@ -4,7 +4,10 @@ import ProgressBar from '../../../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilha, getTopico, getTopicoNavigation, getTrilhaTopicoIds } from '../../../utils/trilhas';
 import { renderMarkdownAsync } from '../../../utils/markdown';
 import type { Trilha, Topico, TopicoNavigation } from '../../../types/trilhas';
+import { NIVEL_LABELS, NIVEL_COLORS_PILL } from '../../../utils/uiConstants';
 import { url } from '../../../utils/url';
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const trilhas = await getAllTrilhas();
@@ -34,19 +37,6 @@ if (!trilha || !topico || !navigation) {
 
 // Render markdown content
 const renderedContent = await renderMarkdownAsync(topico.content);
-
-// Level labels
-const nivelLabels: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediario',
-  avancado: 'Avancado',
-};
-
-const nivelColors: Record<string, string> = {
-  iniciante: 'text-complete-pulse bg-complete-pulse/15 border border-complete-pulse/30',
-  intermediario: 'text-axon-amber bg-axon-amber/15 border border-axon-amber/30',
-  avancado: 'text-alarm-red bg-alarm-red/15 border border-alarm-red/30',
-};
 ---
 
 <BaseLayout title={`${topico.titulo} | ${trilha.nome}`}>
@@ -70,8 +60,8 @@ const nivelColors: Record<string, string> = {
         <span class="px-3 py-1 rounded-full bg-dendrite-violet/20 text-dendrite-violet text-sm font-medium">
           {navigation.modulo.nome}
         </span>
-        <span class={`px-3 py-1 rounded-full text-sm font-medium ${nivelColors[topico.nivel]}`}>
-          {nivelLabels[topico.nivel]}
+        <span class={`px-3 py-1 rounded-full text-sm font-medium ${NIVEL_COLORS_PILL[topico.nivel]}`}>
+          {NIVEL_LABELS[topico.nivel]}
         </span>
         <span class="text-dim text-sm">
           ~{topico.tempoEstimado} min

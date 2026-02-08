@@ -3,7 +3,10 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ProgressBar from '../../../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilha, getTrilhaTopicos, getTrilhaTopicoIds } from '../../../utils/trilhas';
 import type { Trilha, Topico } from '../../../types/trilhas';
+import { NIVEL_LABELS, NIVEL_COLORS_BADGE } from '../../../utils/uiConstants';
 import { url } from '../../../utils/url';
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const trilhas = await getAllTrilhas();
@@ -24,19 +27,6 @@ const topicos = await getTrilhaTopicos(trilhaId);
 // Create a map of topic ID to topic for quick lookup
 const topicosMap = new Map<string, Topico>();
 topicos.forEach(t => topicosMap.set(t.id, t));
-
-// Level labels
-const nivelLabels: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediario',
-  avancado: 'Avancado',
-};
-
-const nivelColors: Record<string, string> = {
-  iniciante: 'text-complete-pulse bg-complete-pulse/20',
-  intermediario: 'text-axon-amber bg-axon-amber/20',
-  avancado: 'text-alarm-red bg-alarm-red/20',
-};
 
 // Calculate stats
 const totalTopicos = getTrilhaTopicoIds(trilha).length;
@@ -74,8 +64,8 @@ const totalHoras = Math.round(totalMinutos / 60);
 
       <!-- Stats -->
       <div class="flex flex-wrap items-center gap-4 mb-6">
-        <span class={`px-3 py-1 rounded-full text-sm font-medium ${nivelColors[trilha.nivel]}`}>
-          {nivelLabels[trilha.nivel]}
+        <span class={`px-3 py-1 rounded-full text-sm font-medium ${NIVEL_COLORS_BADGE[trilha.nivel]}`}>
+          {NIVEL_LABELS[trilha.nivel]}
         </span>
         <span class="text-dim text-sm flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +88,7 @@ const totalHoras = Math.round(totalMinutos / 60);
       </div>
 
       <!-- Progress -->
-      <div class="glass-card p-4 rounded-lg" data-trilha-progress={trilha.id}>
+      <div class="glass-card p-4 rounded-lg" data-trilha-progress={trilha.id} data-trilha-topicos={JSON.stringify(getTrilhaTopicoIds(trilha))}>
         <div class="flex items-center justify-between mb-2">
           <span class="text-sm text-dim">Progresso da Trilha</span>
           <span class="text-sm font-medium text-synapse-cyan">0/{totalTopicos} topicos</span>
@@ -202,6 +192,4 @@ const totalHoras = Math.round(totalMinutos / 60);
   </div>
 </BaseLayout>
 
-<script>
-  // Client-side hydration for progress will be added when progressStore is updated
-</script>
+<!-- Progress hydration handled by progress-hydrator.ts (loaded in BaseLayout) -->

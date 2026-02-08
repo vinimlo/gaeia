@@ -2,13 +2,10 @@
  * Parse markdown checklists into structured data
  */
 
-import { CHECKBOX_PATTERN, HEADER_PATTERN } from './constants';
+import { CHECKBOX_PATTERN } from './constants';
+import type { ChecklistItem } from '../types/trilhas';
 
-export interface ChecklistItem {
-  text: string;
-  checked: boolean;
-  indent: number;
-}
+export type { ChecklistItem };
 
 export interface ChecklistStats {
   total: number;
@@ -50,66 +47,3 @@ export function calculateChecklistStats(items: ChecklistItem[]): ChecklistStats 
   return { total, completed, percentage };
 }
 
-/**
- * Parse multiple checklists from markdown content
- * Returns a map of section headers to their checklist items
- */
-export function parseChecklistSections(markdown: string): Map<string, ChecklistItem[]> {
-  const sections = new Map<string, ChecklistItem[]>();
-  const lines = markdown.split('\n');
-
-  let currentSection = 'default';
-  let currentItems: ChecklistItem[] = [];
-
-  for (const line of lines) {
-    const headerMatch = line.match(HEADER_PATTERN);
-    if (headerMatch) {
-      // Save previous section
-      if (currentItems.length > 0) {
-        sections.set(currentSection, currentItems);
-      }
-      currentSection = headerMatch[2].trim();
-      currentItems = [];
-      continue;
-    }
-
-    const checkboxMatch = line.match(CHECKBOX_PATTERN);
-    if (checkboxMatch) {
-      const [, indent, checkChar, text] = checkboxMatch;
-      currentItems.push({
-        text: text.trim(),
-        checked: checkChar.toLowerCase() === 'x',
-        indent: Math.floor(indent.length / 2)
-      });
-    }
-  }
-
-  // Save last section
-  if (currentItems.length > 0) {
-    sections.set(currentSection, currentItems);
-  }
-
-  return sections;
-}
-
-/**
- * Convert checklist items back to markdown format
- */
-export function checklistToMarkdown(items: ChecklistItem[]): string {
-  return items
-    .map(item => {
-      const indent = '  '.repeat(item.indent);
-      const checkbox = item.checked ? '[x]' : '[ ]';
-      return `${indent}- ${checkbox} ${item.text}`;
-    })
-    .join('\n');
-}
-
-/**
- * Extract all checklists from a markdown file content
- * and return combined stats
- */
-export function getOverallChecklistProgress(markdown: string): ChecklistStats {
-  const items = parseChecklist(markdown);
-  return calculateChecklistStats(items);
-}
