@@ -4,7 +4,6 @@
   "descricao": "Torne-se um engenheiro de IA completo, dominando LLMs, RAG, agentes e muito mais",
   "icone": "cpu",
   "nivel": "intermediario",
-  "horasEstimadas": 150,
 
   "modulos": [
     {

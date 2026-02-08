@@ -5,6 +5,7 @@ services:
       dockerfile: docker/Dockerfile.dev
     ports:
       - "4321:4321"
+      - "4322:4322"
     volumes:
       - .:/app
       - /app/node_modules

@@ -79,7 +79,7 @@ function hydrateTrilhaProgress(): void {
       if (text.includes('%')) {
         textEl.textContent = `${percentage}%`;
       } else if (text.includes('/') && text.includes('topicos')) {
-        textEl.textContent = `${completedCount}/${totalCount} topicos`;
+        textEl.textContent = `${Math.round(completedCount)}/${totalCount} topicos`;
       }
     });
   });
@@ -141,7 +141,8 @@ function hydrateSidebarProgress(): void {
   // Update text below the ring
   const progressText = document.getElementById('sidebar-progress-text');
   if (progressText) {
-    progressText.textContent = `${completedCount} topicos completos`;
+    const displayPct = totalTopicos > 0 ? Math.round((completedCount / totalTopicos) * 100) : 0;
+    progressText.textContent = `${displayPct}% concluído`;
   }
 }
 

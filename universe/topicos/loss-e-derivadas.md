@@ -3,7 +3,7 @@ titulo: "Loss e Derivadas"
 tags: ["fundamentos", "matematica", "calculo", "otimizacao", "loss", "gradiente"]
 prerequisitos: ["mlp-e-matrizes"]
 nivel: "intermediario"
-tempoEstimado: 75
+tempoEstimado: 120
 autor: "GAEIA"
 ultimaAtualizacao: "2026-02-03"
 ---
@@ -21,30 +21,30 @@ ultimaAtualizacao: "2026-02-03"
 ## Videos Fundamentais
 
 - **3Blue1Brown - Essence of Calculus** - Derivadas e regra da cadeia com visualizacoes
-  - [youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr](http://youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr)
+  - [youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr](https://youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr)
 
 ---
 
 ## Leituras e Tutoriais
 
 - **Deep Learning Book (Goodfellow) - Cap. 4** - Diferenciacao e algebra tensorial
-  - [deeplearningbook.org](http://deeplearningbook.org)
+  - [deeplearningbook.org](https://deeplearningbook.org)
 
 - **"The Gradient: A Visual Descent"** - Melhor explicacao visual: gradiente como generalizacao n-dimensional da derivada
-  - [thelaziestprogrammer.com/sharrington/math-of-machine-learning/the-gradient-a-visual-descent](http://thelaziestprogrammer.com/sharrington/math-of-machine-learning/the-gradient-a-visual-descent)
+  - [thelaziestprogrammer.com/sharrington/math-of-machine-learning/the-gradient-a-visual-descent](https://thelaziestprogrammer.com/sharrington/math-of-machine-learning/the-gradient-a-visual-descent)
 
 - **Rohan Varma - Loss Functions** - Demonstra matematicamente por que cross-entropy aprende mais rapido que MSE para classificacao
-  - [rohanvarma.me/Loss-Functions](http://rohanvarma.me/Loss-Functions)
+  - [rohanvarma.me/Loss-Functions](https://rohanvarma.me/Loss-Functions)
 
 - **Neural Network in 100 Lines** - Implementa cross-entropy com log-sum-exp trick para estabilidade numerica
-  - [papers-100-lines.medium.com](http://papers-100-lines.medium.com)
+  - [papers-100-lines.medium.com/neural-network-from-scratch-in-100-lines-of-python-da89a0ce9b03](https://papers-100-lines.medium.com/neural-network-from-scratch-in-100-lines-of-python-da89a0ce9b03)
 
 ---
 
 ## Ferramentas Interativas
 
 - **Desmos Calculator** - Plote funcoes e derivadas com sliders para explorar mudancas de parametros
-  - [desmos.com/calculator](http://desmos.com/calculator)
+  - [desmos.com/calculator](https://desmos.com/calculator)
   - Pre-built: [Visualizing Derivatives](https://desmos.com/calculator/qhks6uqi7a) | [Intro to Derivatives](https://desmos.com/calculator/5nbrcsw4j2)
 
 ---
@@ -59,9 +59,13 @@ O termo sigma'(z) nos gradientes do MSE causa aprendizado lento quando neuronios
 
 ## Entregavel
 
-Seu MLP do bloco anterior agora calcula o loss.
+Seu MLP do bloco anterior agora tem dados COM labels (crie pontos 2D sinteticos com classes 0/1) e calcula o loss.
 
-**Voce deve conseguir explicar:** "Se eu mexer nesse peso um pouquinho pra cima, o loss sobe ou desce?"
+Implemente **MSE** e **Cross-Entropy**. Compare os valores para o mesmo input.
+
+**Gradient check:** Perturbe um peso em `+0.001`, recalcule o loss, e compare `(loss_novo - loss_original) / 0.001` com a derivada analitica. A diferenca deve ser `< 1e-5`.
+
+**Voce deve conseguir explicar:** "Se eu mexer nesse peso um pouquinho pra cima, o loss sobe ou desce?" — e verificar numericamente.
 
 ---
 

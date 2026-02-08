@@ -14,6 +14,7 @@ import { existsSync } from 'fs';
 import { VAULT_ROOT, UNIVERSE_DIR, FRONTMATTER_PATTERN } from './constants';
 import { createLogger } from './logger';
 import { parseChecklist } from './checklist';
+import { extractResources } from './resources';
 import type {
   TrilhasCatalog,
   Trilha,
@@ -294,6 +295,7 @@ export async function getTopico(topicoId: string): Promise<Topico | null> {
       ultimaAtualizacao: (frontmatter.ultimaAtualizacao as string) || '',
       content: body,
       checklistItems: parseChecklist(body),
+      resources: extractResources(body),
     };
 
     cache.topicos.set(topicoId, topico);
@@ -428,6 +430,15 @@ export async function getTopicoTrilhas(topicoId: string): Promise<TopicoTrilhas>
 // ============================================
 // Utility Functions
 // ============================================
+
+/**
+ * Compute total estimated hours for a trilha from its topics' tempoEstimado
+ */
+export async function computeHorasEstimadas(trilhaId: string): Promise<number> {
+  const topicos = await getTrilhaTopicos(trilhaId);
+  const totalMinutos = topicos.reduce((sum, t) => sum + t.tempoEstimado, 0);
+  return Math.round(totalMinutos / 60);
+}
 
 /**
  * Get all unique tags from all topics

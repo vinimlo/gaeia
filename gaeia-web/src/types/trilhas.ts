@@ -4,6 +4,20 @@
  */
 
 // ============================================
+// Resource Types
+// ============================================
+
+export type ResourceType = 'youtube' | 'article' | 'documentation' | 'arxiv' | 'github' | 'interactive' | 'other';
+
+export interface ExtractedResource {
+  url: string;
+  title: string;
+  type: ResourceType;
+  section: string;
+  domain: string;
+}
+
+// ============================================
 // Checklist Types
 // ============================================
 
@@ -82,6 +96,7 @@ export interface Topico extends TopicoFrontmatter {
   id: string;
   content: string;
   checklistItems: ChecklistItem[];
+  resources: ExtractedResource[];
 }
 
 // ============================================
@@ -127,7 +142,7 @@ export interface Trilha {
   descricao: string;
   icone: string;
   nivel: 'iniciante' | 'intermediario' | 'avancado';
-  horasEstimadas: number;
+  horasEstimadas?: number;
   modulos: TrilhaModulo[];
   badges: TrilhaBadge[];
 }

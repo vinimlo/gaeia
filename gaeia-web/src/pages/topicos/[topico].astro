@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProgressBar from '../../components/ProgressBar.astro';
+import TopicActions from '../../components/TopicActions.astro';
+import ResourcePanel from '../../components/ResourcePanel.astro';
 import { getAllTopicos, getTopico, getTopicoTrilhas, getTopicosByTag } from '../../utils/trilhas';
 import { renderMarkdownAsync } from '../../utils/markdown';
 import type { Topico } from '../../types/trilhas';
@@ -92,6 +94,9 @@ const renderedContent = await renderMarkdownAsync(topico.content);
         ))}
       </div>
 
+      <!-- Topic Actions -->
+      <TopicActions topico={topico} />
+
       <!-- Progress (will be hydrated client-side) -->
       <div class="mt-6" data-topico-progress={topico.id}>
         <div class="flex items-center justify-between mb-2">
@@ -156,6 +161,9 @@ const renderedContent = await renderMarkdownAsync(topico.content);
     <!-- Content -->
     <div class="markdown-content mb-8" set:html={renderedContent} />
 
+    <!-- Resource Panel -->
+    <ResourcePanel resources={topico.resources} />
+
     <!-- Related Topics -->
     {relatedTopicos.length > 0 && (
       <section class="mt-12">
@@ -209,4 +217,24 @@ const renderedContent = await renderMarkdownAsync(topico.content);
 
   // Record activity when visiting a topic
   recordActivity();
+
+  // YouTube click-to-play hydration
+  function initYouTubeEmbeds() {
+    document.querySelectorAll<HTMLElement>('.youtube-embed').forEach(embed => {
+      const videoId = embed.dataset.videoId;
+      if (!videoId) return;
+      const playBtn = embed.querySelector('.youtube-embed-play');
+      if (!playBtn) return;
+      playBtn.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.className = 'youtube-embed-iframe';
+        embed.replaceChildren(iframe);
+      }, { once: true });
+    });
+  }
+  initYouTubeEmbeds();
+  document.addEventListener('astro:after-swap', initYouTubeEmbeds);
 </script>

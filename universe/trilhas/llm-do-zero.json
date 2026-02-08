@@ -3,8 +3,7 @@
   "nome": "LLM do Zero",
   "descricao": "Entenda como LLMs funcionam por dentro, construindo um do zero",
   "icone": "brain",
-  "nivel": "iniciante",
-  "horasEstimadas": 80,
+  "nivel": "intermediario",
 
   "modulos": [
     {
@@ -23,10 +22,10 @@
       "nome": "Arquitetura Transformer",
       "descricao": "Como a atencao revolucionou NLP",
       "topicos": [
+        "tokenizacao",
         "embeddings-texto",
         "self-attention",
-        "transformer",
-        "tokenizacao"
+        "transformer"
       ]
     },
     {

@@ -179,6 +179,34 @@ function preprocessObsidianLinks(content: string): string {
 }
 
 /**
+ * Extract YouTube video ID from a URL
+ */
+function extractYouTubeId(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+/**
+ * Detect link type from URL for CSS class
+ */
+function detectLinkType(url: string): string | null {
+  const lower = url.toLowerCase();
+  if (lower.includes('arxiv.org')) return 'arxiv';
+  if (lower.includes('github.com') || lower.includes('gitlab.com')) return 'github';
+  if (lower.includes('colab.research.google.com') || lower.includes('kaggle.com')) return 'interactive';
+  if (lower.includes('docs.') || lower.includes('/docs/') || lower.includes('/documentation')) return 'docs';
+  if (lower.includes('huggingface.co')) return 'huggingface';
+  return 'external';
+}
+
+/**
  * Create custom renderer for marked with neural styling
  */
 function createNeuralRenderer(highlighter?: Highlighter): Partial<Renderer> {
@@ -372,10 +400,38 @@ function createNeuralRenderer(highlighter?: Highlighter): Partial<Renderer> {
       // Determine if link is external
       const isExternal = href.startsWith('http://') || href.startsWith('https://');
 
+      // YouTube embed: render click-to-play placeholder
+      if (isExternal) {
+        const videoId = extractYouTubeId(href);
+        if (videoId) {
+          return `<div class="youtube-embed" data-video-id="${escapeHtml(videoId)}">
+  <button class="youtube-embed-play" aria-label="Assistir vídeo">
+    <img src="https://img.youtube.com/vi/${escapeHtml(videoId)}/mqdefault.jpg" alt="" loading="lazy" />
+    <svg class="youtube-play-icon" viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/><path d="M45 24L27 14v20" fill="white"/></svg>
+  </button>
+  <span class="youtube-embed-title">${text}</span>
+</div>`;
+        }
+      }
+
+      // External links: add resource type class
+      if (isExternal) {
+        const linkType = detectLinkType(href);
+        const typeClass = linkType ? ` resource-link resource-link--${linkType}` : '';
+
+        const attrs = [
+          `href="${escapeHtml(href)}"`,
+          `class="${typeClass.trim()}"`,
+          title ? `title="${escapeHtml(title)}"` : '',
+          'target="_blank" rel="noopener noreferrer"',
+        ].filter(Boolean).join(' ');
+
+        return `<a ${attrs}>${text}</a>`;
+      }
+
       const attrs = [
         `href="${escapeHtml(href)}"`,
         title ? `title="${escapeHtml(title)}"` : '',
-        isExternal ? 'target="_blank" rel="noopener noreferrer"' : '',
       ].filter(Boolean).join(' ');
 
       return `<a ${attrs}>${text}</a>`;

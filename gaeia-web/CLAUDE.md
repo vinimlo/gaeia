@@ -4,6 +4,15 @@
 
 **IMPORTANT: Always use Docker for all build, dev, and test commands.**
 
+## Tech Stack
+
+- **Astro 5** (SSR with `@astrojs/node` or static for GitHub Pages)
+- **Tailwind CSS v4** (via `@tailwindcss/vite` plugin, not PostCSS)
+- **Shiki** for syntax highlighting (custom neural theme in `src/utils/shiki-neural-theme.ts`)
+- **Marked** for markdown rendering
+- **TypeScript** (strict mode, `astro/tsconfigs/strict`)
+- No test framework configured
+
 ```bash
 # Build the project
 docker compose run --rm gaeia-web npm run build
@@ -20,10 +29,21 @@ docker compose run --rm gaeia-web npm install
 
 ## Project Structure
 
+### Path Aliases (tsconfig.json)
+
+- `@/*` → `src/*`
+- `@components/*` → `src/components/*`
+- `@layouts/*` → `src/layouts/*`
+- `@utils/*` → `src/utils/*`
+
 - `src/components/` - Astro components
 - `src/pages/` - Astro pages (file-based routing)
 - `src/utils/` - Utility functions
 - `src/types/` - TypeScript type definitions
+- `src/scripts/` - Client-side scripts (progress hydration, interactive checklist)
+- `src/styles/` - Global CSS (`global.css`, `markdown.css`, `particles.css`)
+- `src/layouts/` - Base layout (single `BaseLayout.astro`)
+- `docker/` - Dockerfile.dev, Dockerfile.prod, nginx.conf
 
 ## Content Architecture
 
@@ -102,3 +122,15 @@ The `universe/_catalog.json` uses direct JSON file paths:
   "topicos": { "path": "topicos", "indexFile": "_index.json" }
 }
 ```
+
+## Output Modes
+
+Controlled by `PUBLIC_MODE` env var in `astro.config.mjs`:
+- `PUBLIC_MODE=hybrid` (default, Docker) → SSR with node adapter, `base: '/'`
+- `PUBLIC_MODE=static` → Static build for GitHub Pages, `base: '/gaeia'`
+
+## Language
+
+- UI and content are in **Brazilian Portuguese** (pt-BR)
+- Variable/function names use Portuguese terms (trilha, topico, modulo, conquistas)
+- Code comments and logs are in English
