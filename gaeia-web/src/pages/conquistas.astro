@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BadgeDisplay from '../components/BadgeDisplay.astro';
 import ProgressBar from '../components/ProgressBar.astro';
-import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos } from '../utils/trilhas';
-import { calculateEarnedBadges, getBadgesByRarity, calculateBadgeStats } from '../utils/badges';
+import { getAllTrilhas, getAllTopicos } from '../utils/trilhas';
+import { calculateEarnedBadges, getBadgesByRarity } from '../utils/badges';
 import { RARITY_NAMES } from '../utils/uiConstants';
 import { url } from '../utils/url';
 
@@ -21,7 +21,6 @@ const earnedCount = earnedBadges.length;
 const progress = Math.round((earnedCount / totalBadges) * 100);
 
 const badgesByRarity = getBadgesByRarity(allBadges);
-const badgeStats = calculateBadgeStats(allBadges);
 
 // Section container colors (different opacity from badge-level RARITY_COLORS)
 const sectionColors = {

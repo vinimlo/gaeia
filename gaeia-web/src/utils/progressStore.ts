@@ -85,8 +85,6 @@ export function calculateStreakData(): StreakData {
 
     for (let i = 1; i < sortedDates.length; i++) {
       const prevDate = new Date(sortedDates[i - 1]);
-      const currDate = new Date(sortedDates[i]);
-
       // Check if dates are consecutive
       prevDate.setDate(prevDate.getDate() - 1);
       if (prevDate.toISOString().split('T')[0] === sortedDates[i]) {

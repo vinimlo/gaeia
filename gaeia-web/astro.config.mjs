@@ -20,10 +20,16 @@ export default defineConfig({
       'import.meta.env.PUBLIC_MODE': JSON.stringify(process.env.PUBLIC_MODE || 'hybrid'),
     },
     server: {
+      hmr: {
+        host: 'localhost',
+        port: 4322,
+      },
       watch: {
+        usePolling: true,
+        interval: 1000,
         // Watch parent vault for content changes
-        ignored: ['!../**/*.md']
-      }
+        ignored: ['!../**/*.md'],
+      },
     }
   }
 });

@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ProgressBar from '../../../components/ProgressBar.astro';
+import TopicActions from '../../../components/TopicActions.astro';
+import ResourcePanel from '../../../components/ResourcePanel.astro';
 import { getAllTrilhas, getTrilha, getTopico, getTopicoNavigation, getTrilhaTopicoIds } from '../../../utils/trilhas';
 import { renderMarkdownAsync } from '../../../utils/markdown';
-import type { Trilha, Topico, TopicoNavigation } from '../../../types/trilhas';
+import type { Topico } from '../../../types/trilhas';
 import { NIVEL_LABELS, NIVEL_COLORS_PILL } from '../../../utils/uiConstants';
 import { url } from '../../../utils/url';
 
@@ -88,6 +90,17 @@ const renderedContent = await renderMarkdownAsync(topico.content);
         )}
       </div>
 
+      <!-- Topic Actions -->
+      <TopicActions
+        topico={topico}
+        trilhaContext={{
+          trilhaNome: trilha.nome,
+          moduloNome: navigation.modulo.nome,
+          posicao: navigation.posicaoNaTrilha + 1,
+          total: navigation.totalNaTrilha,
+        }}
+      />
+
       <!-- Progress (will be hydrated client-side) -->
       <div class="mt-6" data-topico-progress={topico.id}>
         <div class="flex items-center justify-between mb-2">
@@ -100,6 +113,9 @@ const renderedContent = await renderMarkdownAsync(topico.content);
 
     <!-- Content -->
     <div class="markdown-content mb-8" set:html={renderedContent} />
+
+    <!-- Resource Panel -->
+    <ResourcePanel resources={topico.resources} />
 
     <!-- This topic appears in other trails -->
     <section class="mt-8 glass-card p-4 rounded-lg bg-deep-space/50">
@@ -175,4 +191,24 @@ const renderedContent = await renderMarkdownAsync(topico.content);
 
   // Record activity when visiting a topic
   recordActivity();
+
+  // YouTube click-to-play hydration
+  function initYouTubeEmbeds() {
+    document.querySelectorAll<HTMLElement>('.youtube-embed').forEach(embed => {
+      const videoId = embed.dataset.videoId;
+      if (!videoId) return;
+      const playBtn = embed.querySelector('.youtube-embed-play');
+      if (!playBtn) return;
+      playBtn.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.className = 'youtube-embed-iframe';
+        embed.replaceChildren(iframe);
+      }, { once: true });
+    });
+  }
+  initYouTubeEmbeds();
+  document.addEventListener('astro:after-swap', initYouTubeEmbeds);
 </script>
