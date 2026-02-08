@@ -218,7 +218,15 @@ export function isTopicoComplete(topicoId: string): boolean {
  */
 export function getCompletedTopicosCount(): number {
   const allProgress = getTopicosProgress();
-  return Object.values(allProgress).filter(p => p.completo).length;
+  let count = 0;
+  for (const p of Object.values(allProgress)) {
+    if (p.completo) {
+      count += 1;
+    } else if (p.checklist.length > 0) {
+      count += p.checklist.filter(Boolean).length / p.checklist.length;
+    }
+  }
+  return count;
 }
 
 /**
@@ -245,18 +253,24 @@ export function calculateTrilhaProgress(topicoIds: string[]): {
   }
 
   const allProgress = getTopicosProgress();
-  let completedCount = 0;
+  let fractionalCompleted = 0;
 
   for (const id of topicoIds) {
-    if (allProgress[id]?.completo) {
-      completedCount++;
+    const progress = allProgress[id];
+    if (!progress) continue;
+
+    if (progress.completo) {
+      fractionalCompleted += 1;
+    } else if (progress.checklist.length > 0) {
+      const checked = progress.checklist.filter(Boolean).length;
+      fractionalCompleted += checked / progress.checklist.length;
     }
   }
 
   return {
-    completedCount,
+    completedCount: fractionalCompleted,
     totalCount: topicoIds.length,
-    percentage: Math.round((completedCount / topicoIds.length) * 100),
+    percentage: Math.round((fractionalCompleted / topicoIds.length) * 100),
   };
 }
 

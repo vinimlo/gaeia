@@ -432,6 +432,15 @@ export async function getTopicoTrilhas(topicoId: string): Promise<TopicoTrilhas>
 // ============================================
 
 /**
+ * Compute total estimated hours for a trilha from its topics' tempoEstimado
+ */
+export async function computeHorasEstimadas(trilhaId: string): Promise<number> {
+  const topicos = await getTrilhaTopicos(trilhaId);
+  const totalMinutos = topicos.reduce((sum, t) => sum + t.tempoEstimado, 0);
+  return Math.round(totalMinutos / 60);
+}
+
+/**
  * Get all unique tags from all topics
  */
 export async function getAllTags(): Promise<string[]> {

@@ -142,7 +142,7 @@ export interface Trilha {
   descricao: string;
   icone: string;
   nivel: 'iniciante' | 'intermediario' | 'avancado';
-  horasEstimadas: number;
+  horasEstimadas?: number;
   modulos: TrilhaModulo[];
   badges: TrilhaBadge[];
 }

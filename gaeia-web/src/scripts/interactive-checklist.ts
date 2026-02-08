@@ -4,7 +4,7 @@
  * Also hydrates inline checklist containers from markdown
  */
 
-import { recordActivity, updateTopicoChecklist, getTopicoProgress } from '../utils/progressStore';
+import { updateTopicoChecklist, getTopicoProgress } from '../utils/progressStore';
 
 export interface ChecklistConfig {
   container: HTMLElement;
@@ -122,23 +122,20 @@ async function toggleCheckbox(
         const data = await response.json();
         throw new Error(data.error || 'Sync failed');
       }
-    } else {
-      // Modo static: salvar diretamente no localStorage
-      const progress = getTopicoProgress(blockSlug || '') || { checklist: [] as boolean[], completo: false };
-      const checklist = [...progress.checklist];
-
-      while (checklist.length <= index) {
-        checklist.push(false);
-      }
-      checklist[index] = newChecked;
-
-      updateTopicoChecklist(blockSlug || '', checklist);
     }
 
-    // Registrar atividade para streaks (ambos os modos)
-    if (newChecked) {
-      recordActivity();
+    // Salvar no localStorage (ambos os modos)
+    const progress = getTopicoProgress(blockSlug || '') || { checklist: [] as boolean[], completo: false };
+    const checklist = [...progress.checklist];
+
+    // Garantir que o array tenha o tamanho correto (total de itens do checklist no DOM)
+    const totalItems = container.querySelectorAll('.checklist-item').length;
+    while (checklist.length < totalItems) {
+      checklist.push(false);
     }
+    checklist[index] = newChecked;
+
+    updateTopicoChecklist(blockSlug || '', checklist);
 
     // Disparar evento para outros componentes
     window.dispatchEvent(new CustomEvent('progress-updated', {
