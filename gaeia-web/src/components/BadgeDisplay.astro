@@ -1,4 +1,6 @@
 ---
+import { RARITY_COLORS, RARITY_NAMES } from '../utils/uiConstants';
+
 interface Props {
   id: string;
   name: string;
@@ -21,33 +23,6 @@ const {
   size = 'md'
 } = Astro.props;
 
-const rarityColors = {
-  common: {
-    border: 'border-dim/50',
-    bg: 'bg-star-dust/30',
-    glow: '',
-    text: 'text-dim'
-  },
-  rare: {
-    border: 'border-synapse-cyan/50',
-    bg: 'bg-synapse-cyan/10',
-    glow: 'shadow-glow-cyan',
-    text: 'text-synapse-cyan'
-  },
-  epic: {
-    border: 'border-dendrite-violet/50',
-    bg: 'bg-dendrite-violet/10',
-    glow: 'shadow-glow-violet',
-    text: 'text-dendrite-violet'
-  },
-  legendary: {
-    border: 'border-axon-amber/50',
-    bg: 'bg-axon-amber/10',
-    glow: 'shadow-glow-amber',
-    text: 'text-axon-amber'
-  }
-};
-
 const sizes = {
   sm: {
     container: 'w-16 h-16',
@@ -66,7 +41,7 @@ const sizes = {
   }
 };
 
-const config = rarityColors[rarity];
+const config = RARITY_COLORS[rarity];
 const sizeConfig = sizes[size];
 ---
 
@@ -145,7 +120,7 @@ const sizeConfig = sizes[size];
         'mt-2 text-xs font-medium capitalize',
         config.text
       ]}>
-        {rarity === 'legendary' ? 'Lendario' : rarity === 'epic' ? 'Epico' : rarity === 'rare' ? 'Raro' : 'Comum'}
+        {RARITY_NAMES[rarity]}
       </div>
     </div>
     <!-- Tooltip arrow -->

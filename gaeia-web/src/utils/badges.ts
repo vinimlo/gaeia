@@ -2,8 +2,6 @@
  * Badge system for GAEIA gamification
  */
 
-import type { BlockProgress, OverallProgress, StreakInfo } from './progress';
-
 export interface Badge {
   id: string;
   name: string;
@@ -16,7 +14,7 @@ export interface Badge {
 }
 
 export interface BadgeCriteria {
-  type: 'block_complete' | 'blocks_complete' | 'streak' | 'progress' | 'special' | 'unit_complete' | 'units_complete' | 'course_complete' | 'courses_complete';
+  type: 'block_complete' | 'blocks_complete' | 'streak' | 'progress' | 'special';
   value?: number;
   blockNumber?: number;
   unitSlug?: string;
@@ -181,54 +179,17 @@ export const BADGE_DEFINITIONS: Omit<Badge, 'earned' | 'earnedDate'>[] = [
 ];
 
 /**
- * Check if a badge criteria is met
- */
-export function checkBadgeCriteria(
-  criteria: BadgeCriteria,
-  blocks: BlockProgress[],
-  overallProgress: OverallProgress,
-  streak: StreakInfo
-): boolean {
-  switch (criteria.type) {
-    case 'block_complete':
-      const block = blocks.find(b => b.blockNumber === criteria.blockNumber);
-      return block?.status === 'completed';
-
-    case 'blocks_complete':
-      const completedCount = blocks.filter(b => b.status === 'completed').length;
-      return completedCount >= (criteria.value || 0);
-
-    case 'progress':
-      return overallProgress.overallPercentage >= (criteria.value || 0);
-
-    case 'streak':
-      return streak.longestStreak >= (criteria.value || 0);
-
-    case 'special':
-      return false; // Special badges are awarded manually
-
-    default:
-      return false;
-  }
-}
-
-/**
  * Calculate earned badges based on current progress
+ * Badge earning not yet implemented for topic-based system
  */
 export function calculateEarnedBadges(
-  blocks: BlockProgress[],
-  overallProgress: OverallProgress,
-  streak: StreakInfo,
   earnedDates: Record<string, string> = {}
 ): Badge[] {
-  return BADGE_DEFINITIONS.map(def => {
-    const earned = checkBadgeCriteria(def.criteria, blocks, overallProgress, streak);
-    return {
-      ...def,
-      earned,
-      earnedDate: earned ? earnedDates[def.id] || undefined : undefined
-    };
-  });
+  return BADGE_DEFINITIONS.map(def => ({
+    ...def,
+    earned: false,
+    earnedDate: earnedDates[def.id] || undefined
+  }));
 }
 
 /**
@@ -241,15 +202,6 @@ export function getBadgesByRarity(badges: Badge[]): Record<Badge['rarity'], Badg
     epic: badges.filter(b => b.rarity === 'epic'),
     legendary: badges.filter(b => b.rarity === 'legendary')
   };
-}
-
-/**
- * Get next badges that can be earned
- */
-export function getNextBadges(badges: Badge[], limit: number = 3): Badge[] {
-  return badges
-    .filter(b => !b.earned)
-    .slice(0, limit);
 }
 
 /**

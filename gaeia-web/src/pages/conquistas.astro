@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import BadgeDisplay from '../components/BadgeDisplay.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos } from '../utils/trilhas';
-import { BADGE_DEFINITIONS, calculateEarnedBadges, getBadgesByRarity, calculateBadgeStats } from '../utils/badges';
-import type { StreakInfo } from '../utils/progress';
+import { calculateEarnedBadges, getBadgesByRarity, calculateBadgeStats } from '../utils/badges';
+import { RARITY_NAMES } from '../utils/uiConstants';
 import { url } from '../utils/url';
 
 // Load trilhas and topics data
@@ -12,22 +12,8 @@ const trilhas = await getAllTrilhas();
 const topicos = await getAllTopicos();
 const totalTopicos = topicos.length;
 
-// Default streak data (will be enhanced client-side with localStorage data)
-const defaultStreakData: StreakInfo = {
-  currentStreak: 0,
-  longestStreak: 0,
-  lastActiveDate: undefined,
-  weekActivity: [false, false, false, false, false, false, false]
-};
-
-// Calculate badges with empty progress (will be hydrated client-side)
-const allBadges = calculateEarnedBadges([], {
-  totalBlocks: 0,
-  completedBlocks: 0,
-  inProgressBlocks: 0,
-  overallPercentage: 0,
-  blocks: []
-}, defaultStreakData, {});
+// Calculate badges (will be hydrated client-side)
+const allBadges = calculateEarnedBadges();
 
 const earnedBadges = allBadges.filter(b => b.earned);
 const totalBadges = allBadges.length;
@@ -37,18 +23,12 @@ const progress = Math.round((earnedCount / totalBadges) * 100);
 const badgesByRarity = getBadgesByRarity(allBadges);
 const badgeStats = calculateBadgeStats(allBadges);
 
-const rarityColors = {
+// Section container colors (different opacity from badge-level RARITY_COLORS)
+const sectionColors = {
   common: { text: 'text-dim', bg: 'bg-dim/20', border: 'border-dim/30' },
   rare: { text: 'text-synapse-cyan', bg: 'bg-synapse-cyan/20', border: 'border-synapse-cyan/30' },
   epic: { text: 'text-dendrite-violet', bg: 'bg-dendrite-violet/20', border: 'border-dendrite-violet/30' },
   legendary: { text: 'text-axon-amber', bg: 'bg-axon-amber/20', border: 'border-axon-amber/30' },
-};
-
-const rarityNames = {
-  common: 'Comum',
-  rare: 'Raro',
-  epic: 'Epico',
-  legendary: 'Lendario',
 };
 ---
 
@@ -87,11 +67,11 @@ const rarityNames = {
         <div class="grid grid-cols-4 gap-4 text-center">
           {Object.entries(badgesByRarity).map(([rarity, badges]) => {
             const earned = badges.filter(b => b.earned).length;
-            const colors = rarityColors[rarity as keyof typeof rarityColors];
+            const colors = sectionColors[rarity as keyof typeof sectionColors];
             return (
               <div class={`px-3 py-2 rounded-lg ${colors.bg} border ${colors.border}`}>
                 <span class={`text-lg font-bold ${colors.text}`}>{earned}/{badges.length}</span>
-                <p class="text-xs text-faint">{rarityNames[rarity as keyof typeof rarityNames]}</p>
+                <p class="text-xs text-faint">{RARITY_NAMES[rarity as keyof typeof RARITY_NAMES]}</p>
               </div>
             );
           })}
@@ -125,14 +105,14 @@ const rarityNames = {
 
     <!-- All Badges by Rarity -->
     {Object.entries(badgesByRarity).reverse().map(([rarity, badges]) => {
-      const colors = rarityColors[rarity as keyof typeof rarityColors];
+      const colors = sectionColors[rarity as keyof typeof sectionColors];
       const earned = badges.filter(b => b.earned).length;
 
       return (
         <section>
           <h2 class={`text-xl font-display font-semibold mb-4 flex items-center gap-2 ${colors.text}`}>
             <span class={`w-3 h-3 rounded-full ${colors.bg.replace('/20', '')}`} />
-            {rarityNames[rarity as keyof typeof rarityNames]}
+            {RARITY_NAMES[rarity as keyof typeof RARITY_NAMES]}
             <span class="text-sm font-normal text-dim">({earned}/{badges.length})</span>
           </h2>
 

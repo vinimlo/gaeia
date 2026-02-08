@@ -394,25 +394,6 @@ function configureMarked(): void {
 }
 
 /**
- * Render markdown synchronously (without syntax highlighting)
- * Use this for simple cases or when async is not available
- */
-export function renderMarkdown(markdown: string): string {
-  if (!markdown) return '';
-
-  // Preprocess Obsidian wiki links
-  const preprocessed = preprocessObsidianLinks(markdown);
-
-  configureMarked();
-
-  const renderer = createNeuralRenderer();
-  marked.use({ renderer });
-
-  const result = marked.parse(preprocessed);
-  return typeof result === 'string' ? result : '';
-}
-
-/**
  * Render markdown asynchronously with full syntax highlighting
  * Preferred for SSG/SSR contexts where async is available
  */
@@ -434,27 +415,3 @@ export async function renderMarkdownAsync(markdown: string): Promise<string> {
   return typeof result === 'string' ? result : '';
 }
 
-/**
- * Pre-warm the highlighter (useful during build)
- */
-export async function initHighlighter(): Promise<void> {
-  await getHighlighter();
-}
-
-/**
- * Remove checklist items from markdown content
- * This allows the InteractiveChecklist component to handle them exclusively
- */
-export function stripChecklistItems(markdown: string): string {
-  const lines = markdown.split('\n');
-  const result: string[] = [];
-
-  for (const line of lines) {
-    // Skip lines that match checkbox pattern: - [ ] or - [x]
-    if (!/^\s*-\s*\[[ xX]\]\s+/.test(line)) {
-      result.push(line);
-    }
-  }
-
-  return result.join('\n');
-}

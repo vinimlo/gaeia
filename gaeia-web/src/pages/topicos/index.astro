@@ -2,24 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllTopicos, getAllTags, getTopicoTrilhas } from '../../utils/trilhas';
 import type { Topico } from '../../types/trilhas';
+import { NIVEL_LABELS, NIVEL_COLORS_SUBTLE } from '../../utils/uiConstants';
 import { url } from '../../utils/url';
 
 // Load all topics and tags
 const topicos = await getAllTopicos();
 const allTags = await getAllTags();
-
-// Level labels
-const nivelLabels: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediario',
-  avancado: 'Avancado',
-};
-
-const nivelColors: Record<string, string> = {
-  iniciante: 'text-complete-pulse bg-complete-pulse/10',
-  intermediario: 'text-axon-amber bg-axon-amber/10',
-  avancado: 'text-alarm-red bg-alarm-red/10',
-};
 
 // Group topics by first tag (category)
 const groupedByTag = new Map<string, Topico[]>();
@@ -125,8 +113,8 @@ for (const topico of topicos) {
               </h3>
 
               <div class="flex items-center gap-2 text-xs mb-2">
-                <span class={`px-2 py-0.5 rounded-full ${nivelColors[topico.nivel]}`}>
-                  {nivelLabels[topico.nivel]}
+                <span class={`px-2 py-0.5 rounded-full ${NIVEL_COLORS_SUBTLE[topico.nivel]}`}>
+                  {NIVEL_LABELS[topico.nivel]}
                 </span>
                 <span class="text-dim">~{topico.tempoEstimado} min</span>
               </div>
