@@ -3,6 +3,12 @@ import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { VAULT_ROOT, UNIVERSE_DIR, CHECKBOX_PATTERN_GLOBAL } from '../../../utils/constants';
 
+export const prerender = import.meta.env.PUBLIC_MODE === 'static';
+
+export function getStaticPaths() {
+  return [];
+}
+
 export const PATCH: APIRoute = async ({ params, request }) => {
   const { topicoId } = params;
 
