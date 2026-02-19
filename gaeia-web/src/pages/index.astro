@@ -3,12 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import StreakCounter from '../components/StreakCounter.astro';
 import BadgeShelf from '../components/BadgeShelf.astro';
-import { getAllTrilhas, getTrilhaTopicoIds, getAllTopicos, getAllTags, computeHorasEstimadas } from '../utils/trilhas';
+import { getCatalog, getAllTrilhas, getTrilhaTopicoIds, getAllTopicos, getAllTags, computeHorasEstimadas } from '../utils/trilhas';
 import { calculateEarnedBadges } from '../utils/badges';
 import { TRILHA_ICON_PATHS } from '../utils/uiConstants';
 import { url } from '../utils/url';
 
-// Load trilhas and topics
+// Load catalog and trilhas
+const catalog = await getCatalog();
+const siteName = catalog?.nome?.split(' - ')[0] || 'Cosmos';
+const siteFullName = catalog?.nome || 'Cosmos';
+const siteDescription = catalog?.descricao || '';
 const trilhas = await getAllTrilhas();
 const trilhasHoras = await Promise.all(
   trilhas.map(async (trilha) => ({
@@ -25,16 +29,16 @@ const allTags = await getAllTags();
 const badges = calculateEarnedBadges();
 ---
 
-<BaseLayout title="GAEIA - Sua Jornada em IA">
+<BaseLayout title={`${siteName} - ${siteDescription}`}>
   <div class="space-y-8 animate-fade-in">
     <!-- Hero Section -->
     <header class="text-center py-6">
       <h1 class="text-4xl md:text-5xl font-display font-bold text-bright mb-4">
-        <span class="text-synapse-cyan text-glow-cyan">GAEIA</span>
+        <span class="text-synapse-cyan text-glow-cyan">{siteName}</span>
       </h1>
       <p class="text-dim text-lg max-w-2xl mx-auto">
-        Guia de Aprendizado em Engenharia de IA.
-        Sua jornada em IA comeca aqui.
+        {siteFullName}.<br/>
+        {siteDescription}
       </p>
     </header>
 

@@ -11,7 +11,7 @@
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { VAULT_ROOT, UNIVERSE_DIR, FRONTMATTER_PATTERN } from './constants';
+import { UNIVERSE_PATH, FRONTMATTER_PATTERN } from './constants';
 import { createLogger } from './logger';
 import { parseChecklist } from './checklist';
 import { extractResources } from './resources';
@@ -46,7 +46,7 @@ const cache = {
  * Get the full path to the universe directory
  */
 function getUniversePath(): string {
-  return join(VAULT_ROOT, UNIVERSE_DIR);
+  return UNIVERSE_PATH;
 }
 
 // ============================================

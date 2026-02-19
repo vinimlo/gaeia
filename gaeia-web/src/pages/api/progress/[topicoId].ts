@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
-import { VAULT_ROOT, UNIVERSE_DIR, CHECKBOX_PATTERN_GLOBAL } from '../../../utils/constants';
+import { UNIVERSE_PATH, CHECKBOX_PATTERN_GLOBAL } from '../../../utils/constants';
 
 export const prerender = import.meta.env.PUBLIC_MODE === 'static';
 
@@ -38,7 +38,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
     });
   }
 
-  const filePath = join(VAULT_ROOT, UNIVERSE_DIR, 'topicos', `${topicoId}.md`);
+  const filePath = join(UNIVERSE_PATH, 'topicos', `${topicoId}.md`);
 
   try {
     const content = await readFile(filePath, 'utf-8');

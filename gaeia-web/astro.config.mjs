@@ -12,8 +12,8 @@ export default defineConfig({
   ...(isStatic ? {} : {
     adapter: node({ mode: 'standalone' })
   }),
-  site: 'https://vinimlo.github.io',
-  base: isStatic ? '/gaeia' : '/',
+  site: process.env.COSMOS_SITE_URL || (isStatic ? 'https://vinimlo.github.io' : 'http://localhost:4321'),
+  base: process.env.COSMOS_BASE_PATH || (isStatic ? '/gaeia' : '/'),
   vite: {
     plugins: [tailwindcss()],
     define: {

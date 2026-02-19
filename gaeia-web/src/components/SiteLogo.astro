@@ -16,17 +16,17 @@ const uniqueId = Math.random().toString(36).substring(7);
   width={size}
   height={size}
   class={className}
-  aria-label="GAEIA Logo"
+  aria-label="Site Logo"
 >
   <defs>
     <!-- Main gradient: Cyan to Violet -->
-    <linearGradient id={`gaeia-gradient-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id={`site-gradient-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00d4ff"/>
       <stop offset="100%" stop-color="#a78bfa"/>
     </linearGradient>
 
     <!-- Glow effect for nodes -->
-    <filter id={`gaeia-glow-${uniqueId}`} x="-100%" y="-100%" width="300%" height="300%">
+    <filter id={`site-glow-${uniqueId}`} x="-100%" y="-100%" width="300%" height="300%">
       <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
       <feMerge>
         <feMergeNode in="coloredBlur"/>
@@ -35,14 +35,14 @@ const uniqueId = Math.random().toString(36).substring(7);
     </filter>
 
     <!-- Soft glow for center -->
-    <radialGradient id={`gaeia-center-glow-${uniqueId}`}>
+    <radialGradient id={`site-center-glow-${uniqueId}`}>
       <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.5"/>
       <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
   <!-- Neural Network Connections - Primary (G structure) -->
-  <g stroke={`url(#gaeia-gradient-${uniqueId})`} stroke-width="2" opacity="0.7" stroke-linecap="round">
+  <g stroke={`url(#site-gradient-${uniqueId})`} stroke-width="2" opacity="0.7" stroke-linecap="round">
     <!-- Arc of G: N7 → N1 → N2 → N3 → N4 → N5 → N6 → N7 -->
     <line x1="20" y1="10" x2="52" y2="10"/>
     <line x1="52" y1="10" x2="52" y2="32"/>
@@ -57,7 +57,7 @@ const uniqueId = Math.random().toString(36).substring(7);
   </g>
 
   <!-- Neural Network Connections - Secondary (internal network) -->
-  <g stroke={`url(#gaeia-gradient-${uniqueId})`} stroke-width="1" opacity="0.35" stroke-linecap="round">
+  <g stroke={`url(#site-gradient-${uniqueId})`} stroke-width="1" opacity="0.35" stroke-linecap="round">
     <!-- N6 → N8 (diagonal upper) -->
     <line x1="8" y1="28" x2="32" y2="32"/>
     <!-- N5 → N8 (diagonal lower) -->
@@ -65,7 +65,7 @@ const uniqueId = Math.random().toString(36).substring(7);
   </g>
 
   <!-- Neural Network Nodes - 8 nodes forming G shape -->
-  <g filter={`url(#gaeia-glow-${uniqueId})`}>
+  <g filter={`url(#site-glow-${uniqueId})`}>
     <!-- N7: Top of G (20, 10) -->
     <circle cx="20" cy="10" r="4" fill="#00d4ff"/>
 
@@ -88,11 +88,11 @@ const uniqueId = Math.random().toString(36).substring(7);
     <circle cx="8" cy="28" r="4" fill="#5baadb"/>
 
     <!-- N8: Center - focal point (32, 32) - larger with animation -->
-    <circle cx="32" cy="32" r="5" fill={`url(#gaeia-gradient-${uniqueId})`} class:list={[animated && 'animate-pulse-node']}/>
+    <circle cx="32" cy="32" r="5" fill={`url(#site-gradient-${uniqueId})`} class:list={[animated && 'animate-pulse-node']}/>
   </g>
 
   <!-- Central glow effect -->
-  <circle cx="32" cy="32" r="14" fill={`url(#gaeia-center-glow-${uniqueId})`} opacity="0.5"/>
+  <circle cx="32" cy="32" r="14" fill={`url(#site-center-glow-${uniqueId})`} opacity="0.5"/>
 </svg>
 
 <style>

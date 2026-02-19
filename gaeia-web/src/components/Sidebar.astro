@@ -1,10 +1,13 @@
 ---
 import ProgressRing from './ProgressRing.astro';
-import GaeiaLogo from './GaeiaLogo.astro';
-import { getAllTrilhas, getAllTopicos } from '../utils/trilhas';
+import SiteLogo from './SiteLogo.astro';
+import { getCatalog, getAllTrilhas, getAllTopicos } from '../utils/trilhas';
 import { url } from '../utils/url';
 
-// Load trilhas for navigation
+// Load catalog and trilhas for navigation
+const catalog = await getCatalog();
+const siteName = catalog?.nome?.split(' - ')[0] || 'Cosmos';
+const siteSubtitle = catalog?.descricao || '';
 const trilhas = await getAllTrilhas();
 const topicos = await getAllTopicos();
 
@@ -65,11 +68,11 @@ const currentPath = Astro.url.pathname;
   <div class="p-6 border-b border-star-dust/50">
     <a href={url('/')} class="flex items-center gap-3 group">
       <div class="w-10 h-10 rounded-xl bg-star-dust/30 flex items-center justify-center group-hover:bg-star-dust/50 transition-all">
-        <GaeiaLogo size={32} animated={true} />
+        <SiteLogo size={32} animated={true} />
       </div>
       <div>
-        <span class="font-display font-bold text-xl text-bright">GAEIA</span>
-        <span class="block text-xs text-dim">Universo de IA</span>
+        <span class="font-display font-bold text-xl text-bright">{siteName}</span>
+        <span class="block text-xs text-dim">{siteSubtitle}</span>
       </div>
     </a>
   </div>

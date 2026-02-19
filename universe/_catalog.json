@@ -3,6 +3,12 @@
   "nome": "GAEIA - Guia de Aprendizado em IA",
   "descricao": "Sua jornada em IA comeca aqui",
 
+  "branding": {
+    "logo": "shared/logo.svg",
+    "accentColor": "#6366f1",
+    "theme": "neural-dark"
+  },
+
   "trilhas": [
     {
       "id": "llm-do-zero",

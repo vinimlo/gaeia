@@ -37,10 +37,23 @@ export interface ChecklistItem {
 /**
  * Root catalog for trilhas and topicos
  */
+/**
+ * Branding configuration from _catalog.json
+ */
+export interface CatalogBranding {
+  logo?: string;
+  accentColor?: string;
+  theme?: string;
+}
+
+/**
+ * Root catalog for trilhas and topicos
+ */
 export interface TrilhasCatalog {
   version: string;
   nome: string;
   descricao: string;
+  branding?: CatalogBranding;
   trilhas: TrilhaReference[];
   topicos: {
     path: string;

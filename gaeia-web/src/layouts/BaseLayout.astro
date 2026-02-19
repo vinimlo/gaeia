@@ -4,13 +4,18 @@ import '../styles/particles.css';
 import '../styles/markdown.css';
 import Sidebar from '../components/Sidebar.astro';
 import NeuralBackground from '../components/NeuralBackground.astro';
+import { getCatalog } from '../utils/trilhas';
+
+const catalog = await getCatalog();
+const siteName = catalog?.nome?.split(' - ')[0] || 'Cosmos';
+const defaultDescription = catalog?.nome || 'Cosmos';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'GAEIA - Guia de Aprendizado em Engenharia de IA' } = Astro.props;
+const { title, description = defaultDescription } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -23,7 +28,7 @@ const { title, description = 'GAEIA - Guia de Aprendizado em Engenharia de IA' }
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | GAEIA</title>
+    <title>{title} | {siteName}</title>
   </head>
   <body class="min-h-screen">
     <NeuralBackground />
