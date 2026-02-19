@@ -1,4 +1,4 @@
-# GAEIA - Guia de Aprendizado em Engenharia de IA
+# GAEIA - Grupo Autônomo de Estudos em IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -6,7 +6,7 @@ Plataforma educacional interativa para aprender Inteligência Artificial e Machi
 
 ## O que é GAEIA?
 
-GAEIA (Guia de Aprendizado em Engenharia de IA) é um projeto open-source que oferece:
+GAEIA (Grupo Autônomo de Estudos em IA) é um projeto open-source que oferece:
 
 - **Trilhas de Aprendizado** - Caminhos estruturados para aprender IA desde o básico até conceitos avançados
 - **Tópicos Atômicos** - Conteúdo focado e objetivo sobre cada assunto

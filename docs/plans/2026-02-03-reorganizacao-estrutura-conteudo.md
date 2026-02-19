@@ -99,7 +99,7 @@ AI-Engineer/                          # Raiz do vault Obsidian
 ```json
 {
   "version": "2.0",
-  "nome": "GAEIA - Guia de Aprendizado em IA",
+  "nome": "GAEIA - Grupo Autônomo de Estudos em IA",
   "descricao": "Sua jornada em IA começa aqui",
 
   "trilhas": [

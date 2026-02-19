@@ -398,4 +398,4 @@ Usuário paralelo:
 ---
 
 *Documento criado em 2026-02-03*
-*GAEIA - Grupo Autônomo de Estudos em Inteligência Artificial*
+*GAEIA - Grupo Autônomo de Estudos em IA*
