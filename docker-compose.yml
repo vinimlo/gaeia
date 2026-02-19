@@ -1,0 +1,16 @@
+services:
+  cosmos:
+    build:
+      context: ./cosmos
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - "4321:4321"
+      - "4322:4322"
+    volumes:
+      - ./cosmos:/app
+      - /app/node_modules
+      - ./universe:/universe
+    environment:
+      - NODE_ENV=development
+      - PUBLIC_MODE=hybrid
+      - COSMOS_UNIVERSE_PATH=/universe
