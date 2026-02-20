@@ -7,8 +7,7 @@
 
 > Plataforma educacional interativa para aprender IA e Machine Learning, com trilhas gamificadas e conteudo em portugues.
 
-<!-- TODO: Adicionar screenshot do site -->
-<!-- ![GAEIA Screenshot](docs/screenshot.png) -->
+![GAEIA — Plataforma de aprendizado em IA](screenshots/02-home-conquistas.png)
 
 ## O que e?
 
