@@ -40,7 +40,7 @@ jobs:
           PUBLIC_MODE: static
           COSMOS_UNIVERSE_PATH: ${{ github.workspace }}/universe
           COSMOS_SITE_URL: https://vinimlo.github.io
-          COSMOS_BASE_PATH: /GAEIA
+          COSMOS_BASE_PATH: /gaeia
         run: npm run build
 
       - name: Upload artifact
