@@ -1,27 +1,46 @@
-# GAEIA - Guia de Aprendizado em Engenharia de IA
+# GAEIA — Guia de Aprendizado em Engenharia de IA
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Site](https://img.shields.io/badge/Site-Online-10b981.svg)](https://vinimlo.github.io/gaeia)
+[![Topicos](https://img.shields.io/badge/T%C3%B3picos-44%2B-6366f1.svg)](https://vinimlo.github.io/gaeia/topicos)
+[![Cosmos](https://img.shields.io/badge/Engine-Cosmos-ff5d01.svg)](https://github.com/vinimlo/cosmos)
 
-Plataforma educacional interativa para aprender Inteligencia Artificial e Machine Learning, com trilhas de aprendizado estruturadas e conteudo em portugues.
+> Plataforma educacional interativa para aprender IA e Machine Learning, com trilhas gamificadas e conteudo em portugues.
 
-## Arquitetura
+<!-- TODO: Adicionar screenshot do site -->
+<!-- ![GAEIA Screenshot](docs/screenshot.png) -->
 
-GAEIA e um **integrador** que combina dois projetos:
+## O que e?
 
-| Repositorio | Descricao |
-|-------------|-----------|
-| [cosmos](https://github.com/vinimlo/cosmos) | Ferramenta generica que le "universes" e gera sites de aprendizado gamificados |
+GAEIA e uma plataforma de aprendizado em Inteligencia Artificial para a comunidade brasileira. Oferece trilhas de estudo estruturadas, progresso gamificado, badges e conteudo 100% em portugues.
+
+Este repositorio e o **integrador** que combina dois projetos:
+
+| Projeto | Descricao |
+|---------|-----------|
+| [Cosmos](https://github.com/vinimlo/cosmos) | Engine generica que gera sites de aprendizado gamificados |
 | [cosmos-universe-ai](https://github.com/vinimlo/cosmos-universe-ai) | Conteudo de IA no formato Universe |
 
-```
-GAEIA/                          # Integrador
-├── cosmos/                     ← submodule (ferramenta)
-├── universe/                   ← submodule (conteudo)
-├── docker-compose.yml          # Dev environment
-├── .github/workflows/          # CI/CD (deploy para GitHub Pages)
-├── docs/                       # Documentacao e planos
-└── tools/                      # Scripts auxiliares
-```
+## Acesse Online
+
+**[vinimlo.github.io/gaeia](https://vinimlo.github.io/gaeia)**
+
+## Trilhas Disponiveis
+
+### LLM do Zero
+
+Entenda como LLMs funcionam por dentro, construindo um do zero.
+*9 topicos · 3 modulos · Intermediario*
+
+### IA Pratica
+
+Aplique IA em projetos reais: LLMs, RAG, agentes e integracoes.
+*33 topicos · 10 modulos · Intermediario*
+
+### AI Engineer
+
+Torne-se um engenheiro de IA completo, dominando LLMs, RAG, agentes e muito mais.
+*35 topicos · 10 modulos · Intermediario*
 
 ## Quick Start
 
@@ -38,7 +57,7 @@ Se voce ja clonou sem `--recursive`:
 git submodule update --init --recursive
 ```
 
-### Com Docker (Recomendado)
+### Docker (Recomendado)
 
 ```bash
 docker compose up
@@ -54,34 +73,40 @@ npm run dev
 # Acesse http://localhost:4321
 ```
 
-O Cosmos detecta automaticamente o diretorio `universe/` como irmao (`../universe`).
+O Cosmos detecta automaticamente o diretorio `universe/` como irmao.
 
-### Comandos Uteis (Docker)
+## Arquitetura
 
-```bash
-# Build do projeto (modo static)
-docker compose run --rm cosmos npm run build
-
-# Type checking
-docker compose run --rm cosmos npm run astro check
-
-# Instalar dependencias
-docker compose run --rm cosmos npm install
+```
+GAEIA/                              # Integrador
+├── cosmos/                         # submodule — engine (Astro 5)
+├── universe/                       # submodule — conteudo de IA
+├── docker-compose.yml              # Dev environment
+├── .github/workflows/deploy.yml    # CI/CD (GitHub Pages)
+├── docs/                           # Documentacao e planos
+└── tools/                          # Scripts auxiliares
 ```
 
-## Trilhas Disponiveis
-
-- **LLM do Zero** - Entenda como funcionam os Large Language Models desde a base
-- **IA Pratica** - Aprenda a usar APIs e ferramentas de IA no dia a dia
-- **AI Engineer** - Trilha completa para se tornar um engenheiro de IA
+```
+┌──────────┐     combina      ┌──────────┐     ┌──────────────────┐
+│  GAEIA   │ ───────────────► │  Cosmos  │ ◄── │  Universe (IA)   │
+│integrador│                  │  engine  │     │  conteudo        │
+└──────────┘                  └────┬─────┘     └──────────────────┘
+                                   │
+                                   ▼
+                            Site Gamificado
+                         vinimlo.github.io/gaeia
+```
 
 ## Como Contribuir
 
-Contribuicoes sao bem-vindas! Veja o [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes.
+| Quer contribuir com... | Onde contribuir |
+|------------------------|-----------------|
+| Conteudo e topicos | [cosmos-universe-ai](https://github.com/vinimlo/cosmos-universe-ai) |
+| Ferramenta e UI | [cosmos](https://github.com/vinimlo/cosmos) |
+| Deploy e integracao | Aqui neste repo |
 
-- **Conteudo**: Contribua no repo [cosmos-universe-ai](https://github.com/vinimlo/cosmos-universe-ai)
-- **Ferramenta**: Contribua no repo [cosmos](https://github.com/vinimlo/cosmos)
-- **Integracao/Deploy**: Contribua aqui neste repo
+Veja o [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes.
 
 ## Licenca
 
