@@ -1,7 +1,7 @@
 # Design da Logo GAEIA
 
 **Data:** 2026-02-03
-**Projeto:** GAEIA - Grupo Autônomo de Estudos em Inteligência Artificial
+**Projeto:** GAEIA - Grupo Autônomo de Estudos em IA
 **Tipo:** Identidade Visual - Logotipo
 
 ---
@@ -316,7 +316,7 @@ Manter área livre ao redor da logo equivalente a **20% da largura** da logo em 
 
 ### 9.1 Sobre o GAEIA
 
-O GAEIA (Grupo Autônomo de Estudos em Inteligência Artificial) é uma plataforma de aprendizado gamificada que transforma conteúdo educacional em uma experiência interativa com tema astronômico/neural.
+O GAEIA (Grupo Autônomo de Estudos em IA) é uma plataforma de aprendizado gamificada que transforma conteúdo educacional em uma experiência interativa com tema astronômico/neural.
 
 ### 9.2 Identidade Visual Existente
 

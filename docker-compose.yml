@@ -1,16 +1,16 @@
 services:
-  gaeia-web:
+  cosmos:
     build:
-      context: .
+      context: ./cosmos
       dockerfile: docker/Dockerfile.dev
     ports:
       - "4321:4321"
       - "4322:4322"
     volumes:
-      - .:/app
+      - ./cosmos:/app
       - /app/node_modules
-      # Mount parent vault for content access (read-write for checkbox sync)
-      - ..:/vault
+      - ./universe:/universe
     environment:
       - NODE_ENV=development
       - PUBLIC_MODE=hybrid
+      - COSMOS_UNIVERSE_PATH=/universe

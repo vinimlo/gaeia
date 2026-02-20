@@ -820,4 +820,4 @@ Após aprovação deste documento:
 ---
 
 *Documento gerado em 2026-02-02*
-*GAEIA - Grupo Autônomo de Estudos em Inteligência Artificial*
+*GAEIA - Grupo Autônomo de Estudos em IA*

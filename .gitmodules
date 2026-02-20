@@ -1,0 +1,6 @@
+[submodule "cosmos"]
+	path = cosmos
+	url = https://github.com/vinimlo/cosmos.git
+[submodule "universe"]
+	path = universe
+	url = https://github.com/vinimlo/cosmos-universe-ai.git
